@@ -25,7 +25,8 @@ resource "aws_lb_listener" "artifactory" {
   load_balancer_arn = aws_lb.artifactory.arn
   port              = "80"
   protocol          = "HTTP"
-  # TODO: Use HTTPS on ALB
+  # TODO: Use HTTPS on ALB 
+  # NB: without creating a new certificate we can't use HTTPS - using the cert for aws.amazon.com isn't an option :-/
 
   default_action {
     type             = "forward"
