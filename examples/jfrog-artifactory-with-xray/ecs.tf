@@ -74,9 +74,6 @@ resource "aws_ecs_task_definition" "artifactory" {
   volume {
     name = "bootstrap-volume"
   }
-
-
-
 }
 
 resource "aws_ecs_service" "jfrog_artifactory_service" {
@@ -92,7 +89,7 @@ resource "aws_ecs_service" "jfrog_artifactory_service" {
   network_configuration {
     assign_public_ip = true
     subnets          = module.vpc.public_subnets
-    security_groups  = [aws_security_group.xray-instance-sg.id]
+    security_groups  = [aws_security_group.artifactory-instance-sg.id]
   }
 
   load_balancer {

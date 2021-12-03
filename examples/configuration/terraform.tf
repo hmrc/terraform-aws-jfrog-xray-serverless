@@ -6,5 +6,9 @@ terraform {
       source  = "registry.terraform.io/jfrog/artifactory"
       version = "~> 2.6.20"
     }
+    // curl = {
+    //   source = "anschoewe/curl"
+    //   version = "0.1.3"
+    // }
   }
 }

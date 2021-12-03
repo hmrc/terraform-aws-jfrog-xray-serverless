@@ -23,8 +23,8 @@ resource "aws_ecs_service" "main" {
 resource "aws_ecs_task_definition" "main" {
   family                   = var.environment_name
   requires_compatibilities = ["FARGATE"]
-  cpu                      = 2048
-  memory                   = 8192
+  cpu                      = var.xray_task_cpu
+  memory                   = var.xray_task_memory
   execution_role_arn       = aws_iam_role.ecs_execution.arn
   network_mode             = "awsvpc"
 

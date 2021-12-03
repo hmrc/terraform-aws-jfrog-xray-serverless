@@ -23,7 +23,7 @@ module "vpc" {
 
 }
 
-# TODO: Split into separate groups and tighten
+# TODO: Look at tightening the xray rules.
 
 resource "aws_security_group" "xray-instance-sg" {
   name        = "xray"
@@ -31,22 +31,88 @@ resource "aws_security_group" "xray-instance-sg" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    description = "Xray ingress from VPC"
+    description = "Xray ingress - allow all tcp from public subnets"
     from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = module.vpc.public_subnets_cidr_blocks
   }
-
   egress {
-    description = "Xray egress to VPC"
+    description = "Xray egress - allow everything out to public subnets"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  }
-
+}
   tags = {
     Name = "Xray"
+  }
+}
+
+resource "aws_security_group" "artifactory-lb-access" {
+  name = "artifactory-lb"
+  description = "Artifactory access to LB"
+  vpc_id      = module.vpc.vpc_id
+  ingress {
+    description = "Artifactory ingress - allow http to ELB from anywhere"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    description = "Artifactory egress - allow anything out from public subnets to anywhere"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = module.vpc.public_subnets_cidr_blocks
+  }
+  tags = {
+    Name = "Artifactory-lb"
+  }
+}
+
+resource "aws_security_group" "artifactory-instance-sg" {
+  name        = "artifactory"
+  description = "Artifactory VPC access"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    description = "Artifactory ingress - internal communication from public subnets (Xray)"
+    from_port   = 8081
+    to_port     = 8082
+    protocol    = "tcp"
+    cidr_blocks = module.vpc.public_subnets_cidr_blocks
+  }
+  ingress {
+    description = "Artifactory ingress - http from ELB"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = module.vpc.public_subnets_cidr_blocks
+  }
+  egress {
+    description = "Artifactory egress - port 443 outbound to anywhere for pulling container images"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    description = "Artifactory egress - DNS resolution"
+    from_port   = 53
+    to_port     = 53
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    description = "Artifactory egress - anything to the public subnets"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = module.vpc.public_subnets_cidr_blocks
+  }
+  tags = {
+    Name = "Artifactory"
   }
 }
