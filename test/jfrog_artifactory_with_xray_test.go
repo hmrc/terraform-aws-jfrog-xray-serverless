@@ -37,12 +37,14 @@ func TestXray(t *testing.T) {
 	client.SetBasicAuth("admin", "password")
 	client.SetDisableWarn(true)
 
+	repoName := (fmt.Sprintf("test-local-generic-repo-%s", time.Now().Format("20060102150405")))
+
 	// Additional test prep
 	client.R().
 		SetHeader("Accept", "*/*").
 		SetHeader("Content-Type", "application/json").
-		SetBody(map[string]interface{}{"rclass": "local", "packageType": "generic"}).
-		Put(fmt.Sprintf("%s/artifactory/api/repositories/test-local-generic-repo", artifactoryUrl))
+		SetBody(map[string]interface{}{"rclass": "local", "packageType": "generic", "xrayIndex": true}).
+		Put(fmt.Sprintf("%s/artifactory/api/repositories/%s", artifactoryUrl, repoName))
 
 	// Run subtests
 	t.Run("Artifactory Ping", func(t *testing.T) {
@@ -57,25 +59,27 @@ func TestXray(t *testing.T) {
 		// Upload a test artefact to Artifactory
 		upload_resp, _ := client.R().
 			SetBody(`this is an artefact sucka`).
-			Put(fmt.Sprintf("%s/artifactory/test-local-generic-repo/test.jar", artifactoryUrl))
+			Put(fmt.Sprintf("%s/artifactory/%s/test.jar", artifactoryUrl, repoName))
 		assert.Equal(t, 201, upload_resp.StatusCode())
 
 		// Query artefact summary in Xray until the test artefact has been indexed
-		Loop:
-			for i := 0; i < 5; i++ {
-				artefact_summary_resp, _ := client.R().
-					SetBody(`{"paths": ["default/test-local-generic-repo/test.jar"]}`).
-					SetHeader("Content-Type", "application/json").
-					SetResult(&XrayArtifactSummaryResponse{}).
-					Post(fmt.Sprintf("%s/xray/api/v1/summary/artifact", artifactoryUrl))
-				artefact_summary_result := artefact_summary_resp.Result().(*XrayArtifactSummaryResponse)
+		artefactName := "notfound"
+	Loop:
+		for i := 0; i < 10; i++ {
+			artefact_summary_resp, _ := client.R().
+				SetBody(fmt.Sprintf(`{"paths": ["default/%s/test.jar"]}`, repoName)).
+				SetHeader("Content-Type", "application/json").
+				SetResult(&XrayArtifactSummaryResponse{}).
+				Post(fmt.Sprintf("%s/xray/api/v1/summary/artifact", artifactoryUrl))
+			artefact_summary_result := artefact_summary_resp.Result().(*XrayArtifactSummaryResponse)
 
-				if len(artefact_summary_result.Errors) == 0 {
-					assert.Equal(t, "test.jar", artefact_summary_result.Artifacts[0].General.Name)
-					break Loop
-				}
-
-				time.Sleep(2 * time.Second)
+			if len(artefact_summary_result.Errors) == 0 {
+				artefactName = artefact_summary_result.Artifacts[0].General.Name
+				break Loop
 			}
+
+			time.Sleep(5 * time.Second)
+		}
+		assert.Equal(t, "test.jar", artefactName)
 	})
 }

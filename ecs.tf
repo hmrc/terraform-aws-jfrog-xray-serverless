@@ -315,24 +315,7 @@ resource "aws_ecs_task_definition" "main" {
             awslogs-stream-prefix = "rabbitmq"
           }
         }
-        portMappings = [
-          {
-            containerPort = 5672
-            hostPort      = 5672
-          },
-          {
-            containerPort = 15672
-            hostPort      = 15672
-          },
-          {
-            containerPort = 4369
-            hostPort      = 4369
-          },
-          {
-            containerPort = 25672
-            hostPort      = 25672
-          }
-        ]
+
         mountPoints = [
           {
             containerPath = "/etc/rabbitmq"

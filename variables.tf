@@ -4,6 +4,11 @@ variable "environment_name" {
   description = "The name of the environment. Used for the names of various resources."
 }
 
+variable "artifactory_security_group_id" {
+  type        = string
+  description = "The ID of the Security Group assigned to Artifactory Instances."
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to run the JFrog Xray resources in."

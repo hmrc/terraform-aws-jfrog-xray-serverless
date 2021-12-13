@@ -9,13 +9,13 @@ resource "aws_security_group" "ecs_task" {
 # TODO: tighten up ecs security group rules.
 # NB: need UDP port 53 outbound.
 
-resource "aws_security_group_rule" "ecs_task_all_ingress" {
+resource "aws_security_group_rule" "ecs_task_allow_http_from_artifactory" {
   type              = "ingress"
   description       = "Allow all traffic into ecs_task"
-  from_port         = 0
-  to_port           = 65535
+  from_port         = 8082
+  to_port           = 8082
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
+  source_security_group_id = var.artifactory_security_group_id
   security_group_id = aws_security_group.ecs_task.id
 }
 
