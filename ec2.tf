@@ -19,12 +19,32 @@ resource "aws_security_group_rule" "ecs_task_allow_http_from_artifactory" {
   security_group_id = aws_security_group.ecs_task.id
 }
 
-resource "aws_security_group_rule" "ecs_task_all_egress" {
+resource "aws_security_group_rule" "ecs_task_allow_http_to_artifactory" {
   type              = "egress"
-  description       = "Allow all traffic out from ecs_task"
-  from_port         = 0
-  to_port           = 65535
-  protocol          = "-1"
+  description       = "Allow http out from ecs_task to artifactory"
+  from_port         = 8082
+  to_port           = 8082
+  protocol          = "tcp"
+  source_security_group_id = var.artifactory_security_group_id
+  security_group_id = aws_security_group.ecs_task.id
+}
+
+resource "aws_security_group_rule" "ecs_task_allow_https_to_anywhere" {
+  type              = "egress"
+  description       = "Allow https out from ecs_task to anywhere"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.ecs_task.id
+}
+
+resource "aws_security_group_rule" "ecs_task_allow_dns_to_anywhere" {
+  type              = "egress"
+  description       = "Allow DNS out from ecs_task to anywhere"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "udp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.ecs_task.id
 }
