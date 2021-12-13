@@ -23,32 +23,6 @@ module "vpc" {
 
 }
 
-# TODO: Look at tightening the xray rules.
-
-resource "aws_security_group" "xray-instance-sg" {
-  name        = "xray"
-  description = "Xray VPC access"
-  vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    description = "Xray ingress - allow all tcp from public subnets"
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = module.vpc.public_subnets_cidr_blocks
-  }
-  egress {
-    description = "Xray egress - allow everything out to public subnets"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-}
-  tags = {
-    Name = "Xray"
-  }
-}
-
 resource "aws_security_group" "artifactory-lb-access" {
   name = "artifactory-lb"
   description = "Artifactory access to LB"

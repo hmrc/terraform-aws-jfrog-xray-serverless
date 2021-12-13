@@ -11,5 +11,5 @@ resource "aws_db_instance" "main" {
   password               = "password"
   apply_immediately      = true
   skip_final_snapshot    = true
-  vpc_security_group_ids = [var.security_group_id]
+  vpc_security_group_ids = [aws_security_group.rds_instance.id]
 }

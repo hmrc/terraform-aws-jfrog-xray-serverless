@@ -4,9 +4,9 @@ variable "environment_name" {
   description = "The name of the environment. Used for the names of various resources."
 }
 
-variable "security_group_id" {
+variable "vpc_id" {
   type        = string
-  description = "Security group to use for all the things. Probably will be replaced."
+  description = "The ID of the VPC to run the JFrog Xray resources in."
 }
 
 variable "subnet_ids" {

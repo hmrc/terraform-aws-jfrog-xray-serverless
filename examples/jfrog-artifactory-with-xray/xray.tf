@@ -4,10 +4,10 @@ module "jfrog_xray" {
   environment_name      = local.environment_name
   artifactory_url       = "http://${aws_lb.artifactory.dns_name}"
   artifactory_join_key  = local.artifactory_join_key
-  security_group_id     = aws_security_group.xray-instance-sg.id
   subnet_ids            = module.vpc.public_subnets
   assign_public_ip      = true
   database_subnet_group = module.vpc.database_subnet_group
+  vpc_id                = module.vpc.vpc_id
 }
 
 resource "null_resource" "wait_for_xray" {
