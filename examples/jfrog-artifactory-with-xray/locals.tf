@@ -6,9 +6,7 @@ resource "random_string" "resource_code" {
 
 locals {
   environment_name     = "jfrog-xray-${random_string.resource_code.result}"
-  // environment_name = "jfrog-xray-pzbv1"
   artifactory_join_key = "134eb13cfd3ec1fcb7e53219e7f5ee4e"
-
   artifactory_bootstrap_script = <<EOT
 apk add yq
 mkdir -p /mnt/config/bootstrap/access/etc/security
@@ -21,9 +19,7 @@ yq eval -i '.GeneralConfiguration.baseUrl = "http://${aws_lb.artifactory.dns_nam
 yq eval -i '.GeneralConfiguration.licenseKey = "'"$(cat licence.txt | base64 -d)"'"' /mnt/config/etc/artifactory/artifactory.config.import.yml
 yq eval -i '.OnboardingConfiguration.repoTypes[0] = "pypi"' /mnt/config/etc/artifactory/artifactory.config.import.yml
 chown -R 1030:1030 /mnt/config
-yq eval /mnt/config/etc/artifactory/artifactory.config.import.yml
 EOT
 }
 
 # TODO: Do we want the licence key to be extractable from the task definition like this?
-# TODO: Remove debug yq eval at end of script

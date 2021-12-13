@@ -25,12 +25,7 @@ echo "[rabbitmq_management,rabbitmq_prometheus]." > /mnt/rabbitmq-persistent-vol
 
 chown -R ${local.xray_uid}:${local.xray_uid} /mnt/xray-persistent-volume
 chown -R ${local.rabbitmq_uid}:${local.rabbitmq_uid} /mnt/rabbitmq-persistent-volume
-
-yq eval /mnt/xray-persistent-volume/etc/system.yaml
-ls -al /mnt/xray-persistent-volume
-ls -al /mnt/rabbitmq-persistent-volume
 EOT
 }
 
 # TODO: Variablise/hide RDS connection details
-# TODO: Remove debug yq eval at end of script
