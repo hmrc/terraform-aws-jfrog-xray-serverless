@@ -65,7 +65,7 @@ func TestXray(t *testing.T) {
 		// Query artefact summary in Xray until the test artefact has been indexed
 		artefactName := "notfound"
 	Loop:
-		for i := 0; i < 10; i++ {
+		for i := 0; i < 20; i++ {
 			artefact_summary_resp, _ := client.R().
 				SetBody(fmt.Sprintf(`{"paths": ["default/%s/test.jar"]}`, repoName)).
 				SetHeader("Content-Type", "application/json").

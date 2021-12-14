@@ -5,8 +5,8 @@ resource "random_string" "resource_code" {
 }
 
 locals {
-  environment_name     = "jfrog-xray-${random_string.resource_code.result}"
-  artifactory_join_key = "134eb13cfd3ec1fcb7e53219e7f5ee4e"
+  environment_name             = "jfrog-xray-${random_string.resource_code.result}"
+  artifactory_join_key         = "134eb13cfd3ec1fcb7e53219e7f5ee4e"
   artifactory_bootstrap_script = <<EOT
 apk add yq
 mkdir -p /mnt/config/bootstrap/access/etc/security

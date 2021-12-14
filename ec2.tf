@@ -1,31 +1,37 @@
-# TODO: Look at tightening the xray rules.
-
 resource "aws_security_group" "ecs_task" {
   name        = "${var.environment_name}-ecs-task"
   description = "Security group for the Xray ECS task"
   vpc_id      = var.vpc_id
 }
 
-# TODO: tighten up ecs security group rules.
-# NB: need UDP port 53 outbound.
-
 resource "aws_security_group_rule" "ecs_task_allow_http_from_artifactory" {
-  type              = "ingress"
-  description       = "Allow all traffic into ecs_task"
-  from_port         = 8082
-  to_port           = 8082
-  protocol          = "tcp"
+  type                     = "ingress"
+  description              = "Allow all traffic into ecs_task"
+  from_port                = 8082
+  to_port                  = 8082
+  protocol                 = "tcp"
   source_security_group_id = var.artifactory_security_group_id
-  security_group_id = aws_security_group.ecs_task.id
+  security_group_id        = aws_security_group.ecs_task.id
 }
 
 resource "aws_security_group_rule" "ecs_task_allow_http_to_artifactory" {
-  type              = "egress"
-  description       = "Allow http out from ecs_task to artifactory"
-  from_port         = 8082
-  to_port           = 8082
-  protocol          = "tcp"
+  type                     = "egress"
+  description              = "Allow http out from ecs_task to artifactory"
+  from_port                = 8082
+  to_port                  = 8082
+  protocol                 = "tcp"
   source_security_group_id = var.artifactory_security_group_id
+  security_group_id        = aws_security_group.ecs_task.id
+}
+
+#TO DO - make this optional (only needed for the tests)
+resource "aws_security_group_rule" "ecs_task_allow_http_to_anywhere" {
+  type              = "egress"
+  description       = "Allow https out from ecs_task to anywhere"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.ecs_task.id
 }
 

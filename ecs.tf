@@ -101,7 +101,7 @@ resource "aws_ecs_task_definition" "main" {
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
         }]
-        essential = true
+        essential = false
         portMappings = [
           {
             containerPort = 8082
@@ -131,7 +131,7 @@ resource "aws_ecs_task_definition" "main" {
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
         }]
-        essential = true
+        essential = false
         mountPoints = [
           {
             containerPath = "/var/opt/jfrog/observability"
@@ -185,7 +185,8 @@ resource "aws_ecs_task_definition" "main" {
       {
         name      = "xray_indexer"
         image     = "releases-docker.jfrog.io/jfrog/xray-indexer:${var.xray_version}"
-        essential = true
+        user      = "1035:1035"
+        essential = false
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
@@ -220,7 +221,7 @@ resource "aws_ecs_task_definition" "main" {
       {
         name      = "xray_analysis"
         image     = "releases-docker.jfrog.io/jfrog/xray-analysis:${var.xray_version}"
-        essential = true
+        essential = false
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
@@ -255,7 +256,7 @@ resource "aws_ecs_task_definition" "main" {
       {
         name      = "xray_persist"
         image     = "releases-docker.jfrog.io/jfrog/xray-persist:${var.xray_version}"
-        essential = true
+        essential = false
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"

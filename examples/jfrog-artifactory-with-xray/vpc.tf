@@ -24,7 +24,7 @@ module "vpc" {
 }
 
 resource "aws_security_group" "artifactory-lb-access" {
-  name = "artifactory-lb"
+  name        = "artifactory-lb"
   description = "Artifactory access to LB"
   vpc_id      = module.vpc.vpc_id
   ingress {

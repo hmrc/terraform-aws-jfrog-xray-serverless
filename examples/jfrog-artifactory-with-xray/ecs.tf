@@ -5,10 +5,10 @@ resource "aws_ecs_cluster" "main" {
 resource "aws_ecs_task_definition" "artifactory" {
   family                   = "${local.environment_name}-artifactory"
   requires_compatibilities = ["FARGATE"]
-  cpu                = 1024
-  memory             = 2048
-  execution_role_arn = aws_iam_role.artifactory_ecs_execution.arn
-  network_mode       = "awsvpc"
+  cpu                      = 1024
+  memory                   = 2048
+  execution_role_arn       = aws_iam_role.artifactory_ecs_execution.arn
+  network_mode             = "awsvpc"
   container_definitions = jsonencode(
     [
       {
