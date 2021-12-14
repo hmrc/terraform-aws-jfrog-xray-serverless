@@ -50,43 +50,54 @@ resource "aws_security_group" "artifactory-instance-sg" {
   name        = "artifactory"
   description = "Artifactory VPC access"
   vpc_id      = module.vpc.vpc_id
+}
 
-  ingress {
-    description = "Artifactory ingress - internal communication from public subnets (Xray)"
-    from_port   = 8081
-    to_port     = 8082
-    protocol    = "tcp"
-    cidr_blocks = module.vpc.public_subnets_cidr_blocks
-  }
-  ingress {
-    description = "Artifactory ingress - http from ELB"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = module.vpc.public_subnets_cidr_blocks
-  }
-  egress {
-    description = "Artifactory egress - port 443 outbound to anywhere for pulling container images"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    description = "Artifactory egress - DNS resolution"
-    from_port   = 53
-    to_port     = 53
-    protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    description = "Artifactory egress - anything to the public subnets"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = module.vpc.public_subnets_cidr_blocks
-  }
-  tags = {
-    Name = "Artifactory"
-  }
+resource "aws_security_group_rule" "artifactory_allow_http_from_lb" {
+  type                     = "ingress"
+  description              = "Allow http from load balancer to artifactory_instance"
+  from_port                = 8081
+  to_port                  = 8082
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.artifactory-instance-sg.id
+  source_security_group_id = aws_security_group.artifactory-lb-access.id
+}
+
+resource "aws_security_group_rule" "artifactory_allow_http_from_public_subnets" {
+  type              = "ingress"
+  description       = "Allow http from public_subnets to artifactory_instance"
+  from_port         = 8081
+  to_port           = 8082
+  protocol          = "tcp"
+  security_group_id = aws_security_group.artifactory-instance-sg.id
+  cidr_blocks       = module.vpc.public_subnets_cidr_blocks
+}
+
+resource "aws_security_group_rule" "artifactory_allow_https_to_anywhere" {
+  type              = "egress"
+  description       = "Artifactory allow https port to anywhere"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.artifactory-instance-sg.id
+}
+
+resource "aws_security_group_rule" "artifactory_allow_dns_to_anywhere" {
+  type              = "egress"
+  description       = "Artifactory allow DNS to anywhere"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "udp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.artifactory-instance-sg.id
+}
+
+resource "aws_security_group_rule" "artifactory_allow_all_to_vpc_public_subnets" {
+  type              = "egress"
+  description       = "Artifactory allow all traffic to the public subnets"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = module.vpc.public_subnets_cidr_blocks
+  security_group_id = aws_security_group.artifactory-instance-sg.id
 }
