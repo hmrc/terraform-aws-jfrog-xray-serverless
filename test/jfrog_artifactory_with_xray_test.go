@@ -28,7 +28,7 @@ func TestXray(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: "../examples/jfrog-artifactory-with-xray",
 	})
-	// defer terraform.Destroy(t, terraformOptions)
+	defer terraform.Destroy(t, terraformOptions)
 	terraform.InitAndApplyAndIdempotent(t, terraformOptions)
 	artifactoryUrl := terraform.Output(t, terraformOptions, "artifactory_url")
 
