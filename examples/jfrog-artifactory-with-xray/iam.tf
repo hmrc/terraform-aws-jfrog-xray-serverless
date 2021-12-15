@@ -24,7 +24,7 @@ resource "aws_iam_role" "artifactory_ecs_execution" {
         {
           Action = [
             "logs:CreateLogStream",
-            "logs:PutLogEvents",
+            "logs:PutLogEvents"
           ]
           Effect   = "Allow"
           Resource = "${aws_cloudwatch_log_group.artifactory.arn}:*"
@@ -32,4 +32,24 @@ resource "aws_iam_role" "artifactory_ecs_execution" {
       ]
     })
   }
+  
+  inline_policy {
+    name = "ssm"
+
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action = [
+            "ssm:GetParameter",
+            "ssm:GetParameters"
+          ]
+          Effect   = "Allow"
+          Resource = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/artifactory/licence/key"
+        },
+      ]
+    })
+  }
 }
+
+# To Do: ensure this is covered in the readme

@@ -24,6 +24,12 @@ resource "aws_ecs_task_definition" "artifactory" {
             awslogs-stream-prefix = "bootstrap-helper"
           }
         }
+        secrets = [
+          {
+            name = "ARTIFACTORY_LICENCE_KEY"
+            valueFrom = "/artifactory/licence/key"
+          }
+        ]
         mountPoints = [
           {
             containerPath = "/mnt/config/"

@@ -13,10 +13,9 @@ mkdir -p /mnt/config/bootstrap/access/etc/security
 echo '${local.artifactory_join_key}' > /mnt/config/bootstrap/access/etc/security/join.key
 mkdir -p /mnt/config/etc/artifactory
 touch /mnt/config/etc/artifactory/artifactory.config.import.yml
-echo ${base64encode(var.artifactory_licence_key)} > licence.txt
 yq eval -i '.version = 1' /mnt/config/etc/artifactory/artifactory.config.import.yml
 yq eval -i '.GeneralConfiguration.baseUrl = "http://${aws_lb.artifactory.dns_name}"' /mnt/config/etc/artifactory/artifactory.config.import.yml
-yq eval -i '.GeneralConfiguration.licenseKey = "'"$(cat licence.txt | base64 -d)"'"' /mnt/config/etc/artifactory/artifactory.config.import.yml
+yq eval -i '.GeneralConfiguration.licenseKey = "'"$(echo $${ARTIFACTORY_LICENCE_KEY} | base64 -d)"'"' /mnt/config/etc/artifactory/artifactory.config.import.yml
 yq eval -i '.OnboardingConfiguration.repoTypes[0] = "pypi"' /mnt/config/etc/artifactory/artifactory.config.import.yml
 chown -R 1030:1030 /mnt/config
 EOT
