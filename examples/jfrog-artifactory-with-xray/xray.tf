@@ -11,14 +11,21 @@ module "jfrog_xray" {
   artifactory_security_group_id = aws_security_group.artifactory-instance-sg.id
 }
 
-resource "null_resource" "wait_for_xray" {
+resource "null_resource" "wait_for_artifactory" {
   depends_on = [
     module.jfrog_xray
   ]
 
-  triggers = {
-    "xray_task_definition_revision" = "module.jfrog_xray.aws_ecs_task_definition.main.revision"
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    command     = "until curl --silent --fail http://${aws_lb.artifactory.dns_name}/artifactory/api/system/ping; do sleep 10s; done"
   }
+}
+
+resource "null_resource" "wait_for_xray" {
+  depends_on = [
+    null_resource.wait_for_artifactory
+  ]
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
