@@ -21,7 +21,7 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
   name = "jfrog-xray-codebuild-xray-test-execution"
   role = aws_iam_role.codebuild-xray-test-execution.id
 
-# TODO - tighten up policy statements
+  # TODO - tighten up policy statements
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -29,11 +29,19 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
         {
             "Effect": "Allow",
             "Resource": [
+                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:*"
+            ],
+            "Action": [
+                "logs:CreateLogGroup"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
                 "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/jfrog-xray-test-pipeline",
                 "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:jfrog-xray-*"
             ],
             "Action": [
-                "logs:CreateLogGroup",
                 "logs:DeleteLogGroup",
                 "logs:ListTagsLogGroup",
                 "logs:PutRetentionPolicy"
@@ -162,7 +170,18 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
                 "*"
             ],
             "Action": [
-                "elasticfilesystem:CreateFileSystem",
+                "elasticfilesystem:CreateFileSystem"
+            ],
+            "Condition": {
+                "StringEquals": {"aws:RequestTag/terraform_module": "terraform-aws-jfrog-xray-serverless"}
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "*"
+            ],
+            "Action": [
                 "elasticfilesystem:DescribeAccessPoints",
                 "elasticfilesystem:DescribeFileSystems",
                 "elasticfilesystem:DescribeLifecycleConfiguration",
@@ -179,8 +198,11 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
                 "elasticfilesystem:CreateAccessPoint",
                 "elasticfilesystem:CreateMountTarget",
                 "elasticfilesystem:DeleteFileSystem",
-                "elasticfilesystem:DeleteMountTarget",
-            ]
+                "elasticfilesystem:DeleteMountTarget"
+            ],
+            "Condition": {
+                "StringEquals": {"aws:ResourceTag/terraform_module": "terraform-aws-jfrog-xray-serverless"}
+            }
         },
         {
             "Effect": "Allow",
@@ -188,8 +210,11 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
                 "arn:aws:elasticfilesystem:eu-west-2:${data.aws_caller_identity.current.account_id}:access-point/*"
             ],
             "Action": [
-                "elasticfilesystem:DeleteAccessPoint",
-            ]
+                "elasticfilesystem:DeleteAccessPoint"
+            ],
+            "Condition": {
+                "StringEquals": {"aws:ResourceTag/terraform_module": "terraform-aws-jfrog-xray-serverless"}
+            }
         },
         {
             "Effect": "Allow",

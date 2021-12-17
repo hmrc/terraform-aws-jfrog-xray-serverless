@@ -1,4 +1,9 @@
 locals {
+  aws_tags = {
+    environment_name = var.environment_name
+    terraform_module = "terraform-aws-jfrog-xray-serverless"
+  }
+
   rabbitmq_uid = "999"
   xray_uid     = "1035"
 

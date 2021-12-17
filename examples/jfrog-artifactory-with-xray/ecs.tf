@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "artifactory" {
         }
         secrets = [
           {
-            name = "ARTIFACTORY_LICENCE_KEY"
+            name      = "ARTIFACTORY_LICENCE_KEY"
             valueFrom = "/artifactory/licence/key"
           }
         ]

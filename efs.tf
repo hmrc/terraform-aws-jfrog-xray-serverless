@@ -1,9 +1,6 @@
 resource "aws_efs_file_system" "main" {
   creation_token = var.environment_name
-
-  tags = {
-    Name = var.environment_name
-  }
+  tags           = local.aws_tags
 }
 
 resource "aws_efs_mount_target" "main" {
@@ -15,6 +12,7 @@ resource "aws_efs_mount_target" "main" {
 
 resource "aws_efs_access_point" "xray" {
   file_system_id = aws_efs_file_system.main.id
+  tags           = local.aws_tags
 
   posix_user {
     uid = local.xray_uid
@@ -34,6 +32,7 @@ resource "aws_efs_access_point" "xray" {
 
 resource "aws_efs_access_point" "rabbitmq" {
   file_system_id = aws_efs_file_system.main.id
+  tags           = local.aws_tags
 
   posix_user {
     uid = local.rabbitmq_uid
