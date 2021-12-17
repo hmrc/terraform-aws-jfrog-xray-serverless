@@ -29,43 +29,33 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:logs:eu-west-2:370807233099:log-group:/aws/codebuild/*",
-                "arn:aws:logs:eu-west-2:370807233099:log-group:*"
+                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/jfrog-xray-test-pipeline",
+                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:jfrog-xray-*"
             ],
             "Action": [
                 "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-                "logs:PutRetentionPolicy",
-                "logs:DescribeLogGroups",
+                "logs:DeleteLogGroup",
                 "logs:ListTagsLogGroup",
-                "logs:DeleteLogGroup"
+                "logs:PutRetentionPolicy"
             ]
         },
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::codepipeline-eu-west-2-*"
+                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/jfrog-xray-test-pipeline:log-stream:*"
             ],
             "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:GetObjectVersion",
-                "s3:GetBucketAcl",
-                "s3:GetBucketLocation"
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
             ]
         },
-        {
+                {
             "Effect": "Allow",
-            "Action": [
-                "codebuild:CreateReportGroup",
-                "codebuild:CreateReport",
-                "codebuild:UpdateReport",
-                "codebuild:BatchPutTestCases",
-                "codebuild:BatchPutCodeCoverages"
-            ],
             "Resource": [
-                "arn:aws:codebuild:eu-west-2:370807233099:report-group/*"
+                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:*"
+            ],
+            "Action": [
+                "logs:DescribeLogGroups"
             ]
         },
         {
@@ -75,21 +65,40 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
             ],
             "Action": [
                 "ecs:CreateCluster",
-                "ecs:CreateService",
-                "ecs:DeleteCluster",
-                "ecs:DeleteService",
                 "ecs:DeregisterTaskDefinition",
-                "ecs:DescribeClusters",
-                "ecs:DescribeServices",
                 "ecs:DescribeTaskDefinition",
-                "ecs:RegisterTaskDefinition",
-                "ecs:UpdateService"
+                "ecs:RegisterTaskDefinition"
             ]
         },
         {
             "Effect": "Allow",
             "Resource": [
-                "*"
+                "arn:aws:ecs:eu-west-2:${data.aws_caller_identity.current.account_id}:service/jfrog-xray-*/xray",
+                "arn:aws:ecs:eu-west-2:${data.aws_caller_identity.current.account_id}:service/jfrog-xray-*-artifactory/artifactory"
+            ],
+            "Action": [
+                "ecs:CreateService",
+                "ecs:DeleteService",
+                "ecs:DescribeServices",
+                "ecs:UpdateService"
+            ]
+        },
+                {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ecs:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster/jfrog-xray-*",
+                "arn:aws:ecs:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster/jfrog-xray-*-artifactory"
+            ],
+            "Action": [
+                "ecs:DeleteCluster",
+                "ecs:DescribeClusters"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/jfrog-xray-*-ecs-execution",
+                "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/jfrog-xray-*-artifactory-ecs-execution"
             ],
             "Action": [
                 "iam:CreateRole",
@@ -192,17 +201,61 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "*"
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cev",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster-endpoint",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster-pg",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster-snapshot",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:db",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:es",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:og",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:pg",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:proxy",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:proxy-endpoint",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:ri",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:secgrp",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:snapshot",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:subgrp:jfrog-xray-*",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:target-group"
             ],
             "Action": [
                 "rds:AddTagsToResource",
-                "rds:CreateDBInstance",
-                "rds:CreateDBSubnetGroup",
-                "rds:DeleteDBInstance",
-                "rds:DeleteDBSubnetGroup",
-                "rds:DescribeDBInstances",
-                "rds:DescribeDBSubnetGroups",
                 "rds:ListTagsForResource"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:db",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:og",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:pg",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:secgrp",
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:subgrp"
+            ],
+            "Action": [
+                "rds:CreateDBInstance"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:subgrp:jfrog-xray-*"
+            ],
+            "Action": [
+                "rds:CreateDBSubnetGroup",
+                "rds:DeleteDBSubnetGroup",
+                "rds:DescribeDBSubnetGroups"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:db"
+            ],
+            "Action": [                
+                "rds:DeleteDBInstance",
+                "rds:DescribeDBInstances"
             ]
         }
     ]
