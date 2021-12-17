@@ -118,7 +118,8 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
                 "iam:ListInstanceProfilesForRole",
                 "iam:ListRolePolicies",
                 "iam:PassRole",
-                "iam:PutRolePolicy"
+                "iam:PutRolePolicy",
+                "iam:TagRole"
             ]
         },
         {
@@ -222,6 +223,7 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
                 "*"
             ],
             "Action": [
+                "elasticloadbalancing:AddTags",
                 "elasticloadbalancing:CreateListener",
                 "elasticloadbalancing:CreateLoadBalancer",
                 "elasticloadbalancing:CreateTargetGroup",
@@ -242,41 +244,26 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cev:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster-endpoint:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster-pg:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster-snapshot:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:db:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:es:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:og:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:pg:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:proxy:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:proxy-endpoint:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:ri:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:secgrp:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:snapshot:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:subgrp:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:target-group:jfrog-xray-*"
+                "*"
             ],
             "Action": [
-                "rds:AddTagsToResource",
+                "rds:DescribeDBInstances",
+                "rds:DescribeDBSubnetGroups",
                 "rds:ListTagsForResource"
             ]
         },
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:db:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:og:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:pg:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:secgrp:jfrog-xray-*",
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:subgrp:jfrog-xray-*"
+                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:*"
             ],
             "Action": [
+                "rds:AddTagsToResource",
                 "rds:CreateDBInstance"
-            ]
+            ],
+            "Condition": {
+                "StringEquals": {"aws:RequestTag/terraform_module": "terraform-aws-jfrog-xray-serverless"}
+            }
         },
         {
             "Effect": "Allow",
@@ -285,8 +272,7 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
             ],
             "Action": [
                 "rds:CreateDBSubnetGroup",
-                "rds:DeleteDBSubnetGroup",
-                "rds:DescribeDBSubnetGroups"
+                "rds:DeleteDBSubnetGroup"
             ]
         },
         {
@@ -294,9 +280,8 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
             "Resource": [
                 "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:db:jfrog-xray-*"
             ],
-            "Action": [                
-                "rds:DeleteDBInstance",
-                "rds:DescribeDBInstances"
+            "Action": [
+                "rds:DeleteDBInstance"
             ]
         }
     ]
