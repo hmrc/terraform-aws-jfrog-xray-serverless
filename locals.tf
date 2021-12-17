@@ -1,4 +1,5 @@
 locals {
+  # TODO: Allow customers to pass in their own tags and merge them
   aws_tags = {
     environment_name = var.environment_name
     terraform_module = "terraform-aws-jfrog-xray-serverless"

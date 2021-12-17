@@ -1,5 +1,6 @@
 resource "aws_iam_role" "artifactory_ecs_execution" {
   name = "${local.environment_name}-artifactory-ecs-execution"
+  tags = local.aws_tags
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

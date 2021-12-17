@@ -12,4 +12,5 @@ resource "aws_db_instance" "main" {
   apply_immediately      = true
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.rds_instance.id]
+  tags = local.aws_tags
 }

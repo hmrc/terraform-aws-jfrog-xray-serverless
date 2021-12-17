@@ -16,17 +16,15 @@ module "vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  tags = {
-    Terraform   = "true"
-    Environment = "sandbox"
-  }
-
+  tags = local.aws_tags
 }
 
 resource "aws_security_group" "artifactory-lb-access" {
   name        = "artifactory-lb"
   description = "Artifactory access to LB"
   vpc_id      = module.vpc.vpc_id
+  tags = local.aws_tags
+
   ingress {
     description = "Artifactory ingress - allow http to ELB from anywhere"
     from_port   = 80
@@ -34,6 +32,7 @@ resource "aws_security_group" "artifactory-lb-access" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
     description = "Artifactory egress - allow anything out from public subnets to anywhere"
     from_port   = 0
@@ -41,15 +40,13 @@ resource "aws_security_group" "artifactory-lb-access" {
     protocol    = "-1"
     cidr_blocks = module.vpc.public_subnets_cidr_blocks
   }
-  tags = {
-    Name = "Artifactory-lb"
-  }
 }
 
 resource "aws_security_group" "artifactory-instance-sg" {
   name        = "artifactory"
   description = "Artifactory VPC access"
   vpc_id      = module.vpc.vpc_id
+  tags = local.aws_tags
 }
 
 resource "aws_security_group_rule" "artifactory_allow_http_from_lb" {
