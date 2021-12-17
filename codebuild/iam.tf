@@ -162,17 +162,33 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
                 "*"
             ],
             "Action": [
-                "elasticfilesystem:CreateAccessPoint",
                 "elasticfilesystem:CreateFileSystem",
-                "elasticfilesystem:CreateMountTarget",
-                "elasticfilesystem:DeleteAccessPoint",
-                "elasticfilesystem:DeleteFileSystem",
-                "elasticfilesystem:DeleteMountTarget",
                 "elasticfilesystem:DescribeAccessPoints",
                 "elasticfilesystem:DescribeFileSystems",
                 "elasticfilesystem:DescribeLifecycleConfiguration",
                 "elasticfilesystem:DescribeMountTargets",
                 "elasticfilesystem:DescribeMountTargetSecurityGroups"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:elasticfilesystem:eu-west-2:${data.aws_caller_identity.current.account_id}:file-system/*"
+            ],
+            "Action": [
+                "elasticfilesystem:CreateAccessPoint",
+                "elasticfilesystem:CreateMountTarget",
+                "elasticfilesystem:DeleteFileSystem",
+                "elasticfilesystem:DeleteMountTarget",
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:elasticfilesystem:eu-west-2:${data.aws_caller_identity.current.account_id}:access-point/*"
+            ],
+            "Action": [
+                "elasticfilesystem:DeleteAccessPoint",
             ]
         },
         {
