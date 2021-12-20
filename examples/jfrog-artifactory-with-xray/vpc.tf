@@ -42,7 +42,7 @@ resource "aws_security_group" "artifactory-lb-access" {
   }
 }
 
-resource "aws_security_group" "artifactory-instance-sg" {
+resource "aws_security_group" "artifactory_instance" {
   name        = "artifactory"
   description = "Artifactory VPC access"
   vpc_id      = module.vpc.vpc_id
@@ -55,7 +55,7 @@ resource "aws_security_group_rule" "artifactory_allow_http_from_lb" {
   from_port                = 8081
   to_port                  = 8082
   protocol                 = "tcp"
-  security_group_id        = aws_security_group.artifactory-instance-sg.id
+  security_group_id        = aws_security_group.artifactory_instance.id
   source_security_group_id = aws_security_group.artifactory-lb-access.id
 }
 
@@ -65,7 +65,7 @@ resource "aws_security_group_rule" "artifactory_allow_http_from_public_subnets" 
   from_port         = 8081
   to_port           = 8082
   protocol          = "tcp"
-  security_group_id = aws_security_group.artifactory-instance-sg.id
+  security_group_id = aws_security_group.artifactory_instance.id
   cidr_blocks       = module.vpc.public_subnets_cidr_blocks
 }
 
@@ -76,7 +76,7 @@ resource "aws_security_group_rule" "artifactory_allow_https_to_anywhere" {
   to_port           = 443
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.artifactory-instance-sg.id
+  security_group_id = aws_security_group.artifactory_instance.id
 }
 
 resource "aws_security_group_rule" "artifactory_allow_dns_to_anywhere" {
@@ -86,7 +86,7 @@ resource "aws_security_group_rule" "artifactory_allow_dns_to_anywhere" {
   to_port           = 53
   protocol          = "udp"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.artifactory-instance-sg.id
+  security_group_id = aws_security_group.artifactory_instance.id
 }
 
 resource "aws_security_group_rule" "artifactory_allow_all_to_vpc_public_subnets" {
@@ -96,5 +96,5 @@ resource "aws_security_group_rule" "artifactory_allow_all_to_vpc_public_subnets"
   to_port           = 0
   protocol          = "-1"
   cidr_blocks       = module.vpc.public_subnets_cidr_blocks
-  security_group_id = aws_security_group.artifactory-instance-sg.id
+  security_group_id = aws_security_group.artifactory_instance.id
 }

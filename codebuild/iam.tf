@@ -1,5 +1,5 @@
-resource "aws_iam_role" "codebuild-xray-test-execution" {
-  name = "test-role"
+resource "aws_iam_role" "codebuild-execution" {
+  name = local.name
 
   assume_role_policy = <<EOF
 {
@@ -17,9 +17,9 @@ resource "aws_iam_role" "codebuild-xray-test-execution" {
 EOF
 }
 
-resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
-  name = "jfrog-xray-codebuild-xray-test-execution"
-  role = aws_iam_role.codebuild-xray-test-execution.id
+resource "aws_iam_role_policy" "codebuild-execution" {
+  name = local.name
+  role = aws_iam_role.codebuild-execution.id
 
   # TODO - tighten up policy statements
   policy = <<EOF
@@ -39,7 +39,7 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/jfrog-xray-test-pipeline",
+                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${local.name}",
                 "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:jfrog-xray-*"
             ],
             "Action": [
@@ -51,7 +51,7 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/jfrog-xray-test-pipeline:log-stream:*"
+                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${local.name}:log-stream:*"
             ],
             "Action": [
                 "logs:CreateLogStream",
@@ -120,23 +120,6 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
                 "*"
             ],
             "Action": [
-                "ec2:AssociateRouteTable",
-                "ec2:AttachInternetGateway",
-                "ec2:AuthorizeSecurityGroupEgress",
-                "ec2:AuthorizeSecurityGroupIngress",
-                "ec2:CreateInternetGateway",
-                "ec2:CreateRoute",
-                "ec2:CreateRouteTable",
-                "ec2:CreateSecurityGroup",
-                "ec2:CreateSubnet",
-                "ec2:CreateTags",
-                "ec2:CreateVpc",
-                "ec2:DeleteInternetGateway",
-                "ec2:DeleteRoute",
-                "ec2:DeleteRouteTable",
-                "ec2:DeleteSecurityGroup",
-                "ec2:DeleteSubnet",
-                "ec2:DeleteVpc",
                 "ec2:DescribeAccountAttributes",
                 "ec2:DescribeInternetGateways",
                 "ec2:DescribeNetworkAcls",
@@ -147,7 +130,40 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
                 "ec2:DescribeVpcAttribute",
                 "ec2:DescribeVpcClassicLink",
                 "ec2:DescribeVpcClassicLinkDnsSupport",
-                "ec2:DescribeVpcs",
+                "ec2:DescribeVpcs"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ec2:eu-west-2:${data.aws_caller_identity.current.account_id}:*"
+            ],
+            "Action": [
+                "ec2:CreateInternetGateway",
+                "ec2:CreateRoute",
+                "ec2:CreateRouteTable",
+                "ec2:CreateSecurityGroup",
+                "ec2:CreateSubnet",
+                "ec2:CreateTags",
+                "ec2:CreateVpc"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ec2:eu-west-2:${data.aws_caller_identity.current.account_id}:*"
+            ],
+            "Action": [
+                "ec2:AssociateRouteTable",
+                "ec2:AttachInternetGateway",
+                "ec2:AuthorizeSecurityGroupEgress",
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:DeleteInternetGateway",
+                "ec2:DeleteRoute",
+                "ec2:DeleteRouteTable",
+                "ec2:DeleteSecurityGroup",
+                "ec2:DeleteSubnet",
+                "ec2:DeleteVpc",
                 "ec2:DetachInternetGateway",
                 "ec2:DetachNetworkInterface",
                 "ec2:DisassociateRouteTable",
@@ -155,7 +171,10 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
                 "ec2:ModifyVpcAttribute",
                 "ec2:RevokeSecurityGroupEgress",
                 "ec2:RevokeSecurityGroupIngress"
-            ]
+            ],
+            "Condition": {
+                "StringEquals": {"aws:ResourceTag/terraform_module": "terraform-aws-jfrog-xray-serverless"}
+            }
         },
         {
             "Effect": "Allow",

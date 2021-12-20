@@ -1,8 +1,8 @@
 resource "aws_codebuild_project" "xray_test_codebuild" {
-# TODO - variablise name
-  name          = "jfrog-xray-test-pipeline"
-  service_role  = aws_iam_role.codebuild-xray-test-execution.arn
+  name          = local.name
+  service_role  = aws_iam_role.codebuild-execution.arn
   build_timeout = "60"
+
   artifacts {
     type = "NO_ARTIFACTS"
   }
@@ -13,9 +13,11 @@ resource "aws_codebuild_project" "xray_test_codebuild" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
   }
+
   logs_config {
     cloudwatch_logs {}
   }
+
   source {
     # TODO - add github auth
     type            = "GITHUB"
