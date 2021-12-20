@@ -20,7 +20,18 @@ resource "null_resource" "wait_for_artifactory" {
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "until curl --silent --fail http://${aws_lb.artifactory.dns_name}/artifactory/api/system/ping; do sleep 10s; done"
+    command     = <<EOT
+counter=0 
+until curl --silent --fail http://${aws_lb.artifactory.dns_name}/artifactory/api/system/ping
+do
+  if [ "$counter" -gt 60 ] 
+  then
+    exit 1
+  fi
+  sleep 10s
+  ((counter++))
+done
+EOT
   }
 }
 
@@ -31,6 +42,17 @@ resource "null_resource" "wait_for_xray" {
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "until curl --silent --fail http://${aws_lb.artifactory.dns_name}/xray/api/v1/system/ping; do sleep 10s; done"
+    command     = <<EOT
+counter=0
+until curl --silent --fail http://${aws_lb.artifactory.dns_name}/xray/api/v1/system/ping
+do
+  if [ "$counter" -gt 60 ] 
+  then
+    exit 1
+  fi
+  sleep 10s
+  ((counter++))
+done
+EOT
   }
 }
