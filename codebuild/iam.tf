@@ -32,7 +32,8 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
                 "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:*"
             ],
             "Action": [
-                "logs:CreateLogGroup"
+                "logs:CreateLogGroup",
+                "logs:DescribeLogGroups"
             ]
         },
         {
@@ -55,15 +56,6 @@ resource "aws_iam_role_policy" "codebuild-xray-test-execution" {
             "Action": [
                 "logs:CreateLogStream",
                 "logs:PutLogEvents"
-            ]
-        },
-                {
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:*"
-            ],
-            "Action": [
-                "logs:DescribeLogGroups"
             ]
         },
         {
