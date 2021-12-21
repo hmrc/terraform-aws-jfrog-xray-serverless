@@ -37,4 +37,7 @@ sleep 30s
 EOT
 }
 
-# TODO: Variablise/hide RDS connection details
+# TODO: Variablise/randomise/hide RDS connection details
+# TODO: Having the join key written to the task def like this is probably bad. Passing it in as a secret might be better
+# TODO: Quite a few of the verbosity flags in the above can probably be removed now
+# TODO: Do we really need that sleep? Can we do something better?

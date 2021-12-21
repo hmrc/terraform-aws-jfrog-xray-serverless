@@ -1,8 +1,74 @@
 
 # terraform-aws-jfrog-xray-serverless
 
-This is a placeholder README.md for a new repository
+Terraform module which uses serverless or managed [AWS](https://aws.amazon.com) resources to add [JFrog Xray](https://jfrog.com/xray/) capabilities to an existing [JFrog Platform](https://jfrog.com/platform/) configuration.
 
-### License
+## Usage
+
+<!--
+TODO: There is an outstanding question around if passing the database_subnet_group in is appropriate
+
+TODO: Is it cool to have the join key in plaintext like this? Might be better to advise using a sensitive variable or something
+-->
+
+
+```hcl
+module "jfrog_xray" {
+  source = "github.com/hmrc/terraform-aws-jfrog-xray-serverless"
+
+  artifactory_url               = "https://artifactory.example.com"
+  artifactory_join_key          = "foo-join-key"
+  subnet_ids                    = ["subnet-123", "subnet-456"]
+  database_subnet_group         = module.vpc.database_subnet_group
+  vpc_id                        = "vpc-123"
+  artifactory_security_group_id = "sg-123"
+}
+```
+
+### Prerequisites
+
+In order to successfully use this module, you require the following:
+
+* A configured, healthy and licensed instance of JFrog Platform (i.e. [JFrog Artifactory](https://jfrog.com/artifactory/)) running in AWS.
+* The [join key](https://www.jfrog.com/confluence/display/JFROG/Managing+Keys#ManagingKeys-JoinKey) for the JFrog Platform.
+* An [AWS VPC](https://aws.amazon.com/vpc/), including subnets that can route to the public internet and the Artifactory URL.
+
+## Requirements
+
+|Name|Version|
+|-|-|
+|terraform|>= 1.0.11|
+|aws|~> 3.0|
+
+## Providers
+
+|Name|Version|
+|-|-|
+|aws|~> 3.0|
+
+## Modules
+
+No modules.
+
+## Inputs
+
+|Name|Description|Type|Default|Required|
+|-|-|-|-|-|
+|artifactory_join_key|Key to use in order to join Xray to the JFrog Artifactory/Platform service.|`string`|n/a|yes|
+|artifactory_security_group_id|The ID of the Security Group assigned to Artifactory instances.|`string`|n/a|yes|
+|artifactory_url|URL of the JFrog Artifactory/Platform service that Xray will be joined to.|`string`|n/a|yes|
+|assign_public_ip|Set whether to give the Xray task a public IP. Only turn this on if testing with only an internet gateway.|`bool`|`false`|no|
+|environment_name|The name of the environment. Used for the names of various resources.|`string`|`"jfrog-xray"`|no|
+|subnet_ids|A list of subnet IDs to run the JFrog Xray resources in.|`list(string)`|n/a|yes|
+|vpc_id|The ID of the VPC to run the JFrog Xray resources in.|`string`|n/a|yes|
+|xray_task_cpu|CPU value to be used for the Xray Fargate task.|`number`|`1024`|no|
+|xray_task_memory|Amount of memory to be used for the Xray Fargate task.|`number`|`2048`|no|
+|xray_version|Version of JFrog Xray you wish to run.|`string`|`"3.36.2"`|no|
+
+## Outputs
+
+No outputs.
+
+## License
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").

@@ -6,7 +6,7 @@ variable "environment_name" {
 
 variable "artifactory_security_group_id" {
   type        = string
-  description = "The ID of the Security Group assigned to Artifactory Instances."
+  description = "The ID of the Security Group assigned to Artifactory instances."
 }
 
 variable "vpc_id" {
@@ -25,6 +25,7 @@ variable "assign_public_ip" {
   description = "Set whether to give the Xray task a public IP. Only turn this on if testing with only an internet gateway."
 }
 
+# TODO: Confirm if this is temporary, do we create our own?
 variable "database_subnet_group" {
   type        = string
   description = "This is probabably temporary too like."
@@ -41,6 +42,7 @@ variable "artifactory_url" {
   description = "URL of the JFrog Artifactory/Platform service that Xray will be joined to."
 }
 
+# TODO: This should be sensitive, or maybe a parameter store path should be provided
 variable "artifactory_join_key" {
   type        = string
   description = "Key to use in order to join Xray to the JFrog Artifactory/Platform service."
@@ -49,7 +51,7 @@ variable "artifactory_join_key" {
 variable "xray_task_memory" {
   type        = number
   default     = 2048
-  description = "Amount of memory to be used for the Xray Fargate task."
+  description = "Amount of memory in to be used for the Xray Fargate task."
 }
 
 variable "xray_task_cpu" {
