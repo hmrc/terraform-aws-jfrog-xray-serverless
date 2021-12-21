@@ -59,7 +59,7 @@ With aws-vault:
 |Name|Version|
 |-|-|
 |terraform|>= 1.0.11|
-|aws|~> 3.0|
+|aws|>= 3.69.0|
 
 ## Providers
 

@@ -11,8 +11,6 @@ module "jfrog_xray" {
   artifactory_security_group_id = aws_security_group.artifactory_instance.id
 }
 
-# TODO: Waiters need to timeout
-
 resource "null_resource" "wait_for_artifactory" {
   depends_on = [
     module.jfrog_xray
@@ -21,10 +19,10 @@ resource "null_resource" "wait_for_artifactory" {
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
     command     = <<EOT
-counter=0 
+counter=0
 until curl --silent --fail http://${aws_lb.artifactory.dns_name}/artifactory/api/system/ping
 do
-  if [ "$counter" -gt 60 ] 
+  if [ "$counter" -gt 60 ]
   then
     exit 1
   fi
@@ -46,7 +44,7 @@ resource "null_resource" "wait_for_xray" {
 counter=0
 until curl --silent --fail http://${aws_lb.artifactory.dns_name}/xray/api/v1/system/ping
 do
-  if [ "$counter" -gt 60 ] 
+  if [ "$counter" -gt 60 ]
   then
     exit 1
   fi
