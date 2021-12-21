@@ -33,6 +33,16 @@ In order to successfully use this module, you require the following:
 * The [join key](https://www.jfrog.com/confluence/display/JFROG/Managing+Keys#ManagingKeys-JoinKey) for the JFrog Platform.
 * An [AWS VPC](https://aws.amazon.com/vpc/), including subnets that can route to the public internet and the Artifactory URL.
 
+## Examples
+
+* [JFrog Artifactory with Xray](https://github.com/hmrc/terraform-aws-jfrog-xray-serverless/tree/main/examples/jfrog-artifactory-with-xray)
+
+## Contributing
+
+Report issues/questions/feature requests on in the [issues](https://github.com/hmrc/terraform-aws-jfrog-xray-serverless/issues/new) section.
+
+PRs are welcomed. More specific guidance will be added in future.
+
 ## Requirements
 
 |Name|Version|
@@ -42,13 +52,38 @@ In order to successfully use this module, you require the following:
 
 ## Providers
 
-|Name|Version|
-|-|-|
-|aws|~> 3.0|
+No providers.
 
 ## Modules
 
 No modules.
+
+## Resources
+
+|Name|Type|
+|-|-|
+|aws_cloudwatch_log_group.main|resource|
+|aws_db_instance.main|resource|
+|aws_ecs_cluster.main|resource|
+|aws_ecs_service.main|resource|
+|aws_ecs_task_definition.main|resource|
+|aws_efs_access_point.rabbitmq|resource|
+|aws_efs_access_point.xray|resource|
+|aws_efs_file_system.main|resource|
+|aws_efs_mount_target.main|resource|
+|aws_iam_role.ecs_execution|resource|
+|aws_security_group.ecs_task|resource|
+|aws_security_group.efs_file_system|resource|
+|aws_security_group.rds_instance|resource|
+|aws_security_group_rule.ecs_task_allow_dns_to_anywhere|resource|
+|aws_security_group_rule.ecs_task_allow_http_from_artifactory|resource|
+|aws_security_group_rule.ecs_task_allow_http_to_anywhere|resource|
+|aws_security_group_rule.ecs_task_allow_http_to_artifactory|resource|
+|aws_security_group_rule.ecs_task_allow_https_to_anywhere|resource|
+|aws_security_group_rule.ecs_task_allow_nfs_to_efs|resource|
+|aws_security_group_rule.ecs_task_allow_postgres_to_rds|resource|
+|aws_security_group_rule.efs_allow_nfs_from_ecs_task|resource|
+|aws_security_group_rule.rds_allow_postgres_from_ecs_task|resource|
 
 ## Inputs
 
