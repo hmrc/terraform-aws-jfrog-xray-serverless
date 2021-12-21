@@ -2,7 +2,7 @@ resource "aws_lb" "artifactory" {
   name               = "${local.environment_name}-artifactory"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.artifactory-lb-access.id]
+  security_groups    = [aws_security_group.artifactory_load_balancer.id]
   subnets            = module.vpc.public_subnets
   tags = local.aws_tags
 }

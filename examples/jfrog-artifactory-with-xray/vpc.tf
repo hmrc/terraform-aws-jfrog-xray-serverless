@@ -19,7 +19,7 @@ module "vpc" {
   tags = local.aws_tags
 }
 
-resource "aws_security_group" "artifactory-lb-access" {
+resource "aws_security_group" "artifactory_load_balancer" {
   name        = "artifactory-lb"
   description = "Artifactory access to LB"
   vpc_id      = module.vpc.vpc_id
@@ -56,7 +56,7 @@ resource "aws_security_group_rule" "artifactory_allow_http_from_lb" {
   to_port                  = 8082
   protocol                 = "tcp"
   security_group_id        = aws_security_group.artifactory_instance.id
-  source_security_group_id = aws_security_group.artifactory-lb-access.id
+  source_security_group_id = aws_security_group.artifactory_load_balancer.id
 }
 
 resource "aws_security_group_rule" "artifactory_allow_http_from_public_subnets" {
