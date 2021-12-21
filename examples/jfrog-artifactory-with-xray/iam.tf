@@ -46,7 +46,7 @@ resource "aws_iam_role" "artifactory_ecs_execution" {
             "ssm:GetParameters"
           ]
           Effect   = "Allow"
-          Resource = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/artifactory/licence/key"
+          Resource = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/terraform-aws-jfrog-xray-serverless/artifactory/licence-key-base64"
         },
       ]
     })

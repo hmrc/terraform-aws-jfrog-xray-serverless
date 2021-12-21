@@ -43,6 +43,17 @@ Report issues/questions/feature requests on in the [issues](https://github.com/h
 
 PRs are welcomed. More specific guidance will be added in future.
 
+### Local Testing
+
+Terratests can be run locally by running `make test` with AWS authentication.
+
+With aws-profile:   
+`aws-profile -p <user> make test`
+
+With aws-vault:   
+`aws-vault exec <user> -- make test` 
+
+
 ## Requirements
 
 |Name|Version|

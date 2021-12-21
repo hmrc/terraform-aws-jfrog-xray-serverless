@@ -29,7 +29,7 @@ resource "aws_ecs_task_definition" "artifactory" {
         secrets = [
           {
             name      = "ARTIFACTORY_LICENCE_KEY"
-            valueFrom = "/artifactory/licence/key"
+            valueFrom = "/terraform-aws-jfrog-xray-serverless/artifactory/licence-key-base64"
           }
         ]
         mountPoints = [
