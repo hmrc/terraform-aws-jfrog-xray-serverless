@@ -44,7 +44,7 @@ resource "null_resource" "wait_for_xray" {
 counter=0
 until curl --silent --fail http://${aws_lb.artifactory.dns_name}/xray/api/v1/system/ping
 do
-  if [ "$counter" -gt 60 ]
+  if [ "$counter" -gt 90 ]
   then
     exit 1
   fi
