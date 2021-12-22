@@ -52,5 +52,3 @@ resource "aws_iam_role" "artifactory_ecs_execution" {
     })
   }
 }
-
-# To Do: ensure this is covered in the readme

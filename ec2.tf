@@ -28,7 +28,7 @@ resource "aws_security_group_rule" "ecs_task_allow_http_to_artifactory" {
 #TO DO - make this optional (only needed for the tests)
 resource "aws_security_group_rule" "ecs_task_allow_http_to_anywhere" {
   type              = "egress"
-  description       = "Allow https out from ecs_task to anywhere"
+  description       = "Allow http out from ecs_task to anywhere"
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
