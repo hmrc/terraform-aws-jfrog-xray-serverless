@@ -21,7 +21,6 @@ resource "aws_ecs_service" "main" {
   }
 }
 
-# TODO: It takes about three goes to start a task, apparantly due to fs permissions. This delays the creation of a new stack considerably.
 resource "aws_ecs_task_definition" "main" {
   family                   = var.environment_name
   requires_compatibilities = ["FARGATE"]

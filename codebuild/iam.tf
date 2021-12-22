@@ -21,7 +21,6 @@ resource "aws_iam_role_policy" "codebuild-execution" {
   name = local.name
   role = aws_iam_role.codebuild-execution.id
 
-  # TODO - tighten up policy statements
   policy = <<EOF
 {
     "Version": "2012-10-17",
