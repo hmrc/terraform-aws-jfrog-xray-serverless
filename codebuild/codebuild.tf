@@ -19,7 +19,6 @@ resource "aws_codebuild_project" "xray_test_codebuild" {
   }
 
   source {
-    # TODO - add github auth
     type            = "GITHUB"
     location        = "https://github.com/hmrc/terraform-aws-jfrog-xray-serverless.git"
     git_clone_depth = 1
@@ -46,6 +45,4 @@ resource "aws_codebuild_project" "xray_test_codebuild" {
       }
     })
   }
-  # TODO - variablise branch
-  source_version = "PBD-2401-initial"
 }
