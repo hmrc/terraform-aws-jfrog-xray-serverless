@@ -72,6 +72,7 @@ No modules.
 |-|-|
 |aws_cloudwatch_log_group.main|resource|
 |aws_db_instance.main|resource|
+|aws_db_subnet_group.main|resource|
 |aws_ecs_cluster.main|resource|
 |aws_ecs_service.main|resource|
 |aws_ecs_task_definition.main|resource|
