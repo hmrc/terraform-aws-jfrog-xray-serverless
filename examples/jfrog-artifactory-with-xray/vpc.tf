@@ -6,12 +6,8 @@ module "vpc" {
   cidr = "10.0.0.0/16"
 
   # TODO: Variabalise region?
-  azs              = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
-  public_subnets   = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
-  database_subnets = ["10.0.104.0/24", "10.0.105.0/24", "10.0.106.0/24"]
-
-  create_database_subnet_group       = true
-  create_database_subnet_route_table = true
+  azs            = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
+  public_subnets = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 
   enable_dns_hostnames = true
   enable_dns_support   = true
