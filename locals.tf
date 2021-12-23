@@ -1,3 +1,9 @@
+resource "random_password" "rds" {
+  length           = 128
+  special          = true
+  override_special = "@"
+}
+
 locals {
   # TODO: Allow customers to pass in their own tags and merge them
   aws_tags = {
@@ -7,8 +13,8 @@ locals {
 
   rabbitmq_uid = "999"
   xray_uid     = "1035"
-  
-  rds_password = "iusdhfiysdhofisdkpf"
+
+  rds_password = random_password.rds.result
 
   bootstrap_script = <<EOT
 apk add curl
@@ -38,6 +44,5 @@ sleep 30s
 EOT
 }
 
-# TODO: Variablise/randomise/hide RDS connection details
 # TODO: Having the join key written to the task def like this is probably bad. Passing it in as a secret might be better
 # TODO: Do we really need that sleep? Can we do something better?
