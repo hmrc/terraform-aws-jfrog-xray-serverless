@@ -57,6 +57,7 @@ With aws-vault:
 |-|-|
 |terraform|>= 1.0.11|
 |aws|>= 3.69.0|
+|random|>= 3.1.0|
 
 ## Providers
 
@@ -70,6 +71,7 @@ No modules.
 
 |Name|Type|
 |-|-|
+|aws_caller_identity.current|data|
 |aws_cloudwatch_log_group.main|resource|
 |aws_db_instance.main|resource|
 |aws_db_subnet_group.main|resource|
@@ -93,6 +95,7 @@ No modules.
 |aws_security_group_rule.ecs_task_allow_postgres_to_rds|resource|
 |aws_security_group_rule.efs_allow_nfs_from_ecs_task|resource|
 |aws_security_group_rule.rds_allow_postgres_from_ecs_task|resource|
+|random_password.rds|resource|
 
 ## Inputs
 

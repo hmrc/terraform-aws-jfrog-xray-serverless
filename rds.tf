@@ -10,7 +10,7 @@ resource "aws_db_instance" "main" {
   instance_class         = "db.t3.micro"
   name                   = "jfrogxray"
   username               = "jfrogxray"
-  password               = "password"
+  password               = local.rds_password
   apply_immediately      = true
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.rds_instance.id]
@@ -22,3 +22,4 @@ resource "aws_db_subnet_group" "main" {
   subnet_ids = var.subnet_ids
   tags       = local.aws_tags
 }
+

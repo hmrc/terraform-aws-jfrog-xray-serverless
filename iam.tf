@@ -33,4 +33,24 @@ resource "aws_iam_role" "ecs_execution" {
       ]
     })
   }
+
+  inline_policy {
+    name = "ssm"
+
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action = [
+            "ssm:GetParameter",
+            "ssm:GetParameters"
+          ]
+          Effect = "Allow"
+          Resource = [
+            "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/${var.environment_name}/rds/password"
+          ]
+        },
+      ]
+    })
+  }
 }

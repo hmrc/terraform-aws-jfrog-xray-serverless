@@ -71,6 +71,12 @@ resource "aws_ecs_task_definition" "main" {
             awslogs-stream-prefix = "bootstrap-helper"
           }
         }
+        secrets = [
+          {
+            name      = "RDS_PASSWORD"
+            valueFrom = "/${var.environment_name}/rds/password"
+          }
+        ]
         mountPoints = [
           {
             containerPath = "/mnt/xray-persistent-volume/"
