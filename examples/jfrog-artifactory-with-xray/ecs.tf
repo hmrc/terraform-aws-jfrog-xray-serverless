@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "artifactory" {
   memory                   = 2048
   execution_role_arn       = aws_iam_role.artifactory_ecs_execution.arn
   network_mode             = "awsvpc"
-  tags = local.aws_tags
+  tags                     = local.aws_tags
 
   container_definitions = jsonencode(
     [
@@ -93,7 +93,7 @@ resource "aws_ecs_service" "jfrog_artifactory_service" {
   deployment_maximum_percent         = 100
   deployment_minimum_healthy_percent = 0
   launch_type                        = "FARGATE"
-  tags = local.aws_tags
+  tags                               = local.aws_tags
 
   network_configuration {
     assign_public_ip = true

@@ -12,7 +12,7 @@ resource "aws_ecs_service" "main" {
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100
   launch_type                        = "FARGATE"
-  tags = local.aws_tags
+  tags                               = local.aws_tags
 
   network_configuration {
     subnets          = var.subnet_ids
@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "main" {
   memory                   = var.xray_task_memory
   execution_role_arn       = aws_iam_role.ecs_execution.arn
   network_mode             = "awsvpc"
-  tags = local.aws_tags
+  tags                     = local.aws_tags
 
   volume {
     name = "xray-persistent-volume"

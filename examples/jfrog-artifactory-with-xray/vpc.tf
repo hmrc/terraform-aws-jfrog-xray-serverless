@@ -23,7 +23,7 @@ resource "aws_security_group" "artifactory_load_balancer" {
   name        = "artifactory-lb"
   description = "Artifactory access to LB"
   vpc_id      = module.vpc.vpc_id
-  tags = local.aws_tags
+  tags        = local.aws_tags
 
   ingress {
     description = "Artifactory ingress - allow http to ELB from anywhere"
@@ -46,7 +46,7 @@ resource "aws_security_group" "artifactory_instance" {
   name        = "artifactory"
   description = "Artifactory VPC access"
   vpc_id      = module.vpc.vpc_id
-  tags = local.aws_tags
+  tags        = local.aws_tags
 }
 
 resource "aws_security_group_rule" "artifactory_allow_http_from_lb" {
