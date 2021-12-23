@@ -1,7 +1,8 @@
-resource "random_password" "rds" {
-  length           = 128
+resource "random_password" "rds_pwd" {
+  length           = 64
+  upper            = true
   special          = true
-  override_special = "@"
+  override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
 locals {
@@ -14,11 +15,17 @@ locals {
   rabbitmq_uid = "999"
   xray_uid     = "1035"
 
-  rds_password = random_password.rds.result
+  rds_password = random_password.rds_pwd.result
+
+  // rds_password = "blahblahblah"
 
   bootstrap_script = <<EOT
 apk add curl
 apk add yq
+
+echo "******* "$${RDS_PASSWORD}" *******"
+
+sleep 120
 
 xray_system_yaml_path="/mnt/xray-persistent-volume/etc/system.yaml"
 mkdir -p $(dirname $${xray_system_yaml_path})
@@ -29,6 +36,8 @@ yq eval -i '.shared.database.driver = "rg.postgresql.Driver"' $${xray_system_yam
 yq eval -i '.shared.database.url = "postgres://${aws_db_instance.main.endpoint}/jfrogxray?sslmode=disable"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.username = "jfrogxray"' $${xray_system_yaml_path}
 rds_password=$${RDS_PASSWORD} yq eval -i '.shared.database.password = env(rds_password)' $${xray_system_yaml_path}
+
+yq eval $${xray_system_yaml_path}
 
 curl -LO https://releases.jfrog.io/artifactory/jfrog-xray/xray-compose/${var.xray_version}/jfrog-xray-${var.xray_version}-compose.tar.gz
 tar -zxf jfrog-xray-${var.xray_version}-compose.tar.gz
