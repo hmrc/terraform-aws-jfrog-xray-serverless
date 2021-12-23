@@ -6,8 +6,6 @@ Terraform module which uses serverless or managed [AWS](https://aws.amazon.com) 
 ## Usage
 
 <!--
-TODO: There is an outstanding question around if passing the database_subnet_group in is appropriate
-
 TODO: Is it cool to have the join key in plaintext like this? Might be better to advise using a sensitive variable or something
 -->
 
@@ -19,7 +17,6 @@ module "jfrog_xray" {
   artifactory_url               = "https://artifactory.example.com"
   artifactory_join_key          = "foo-join-key"
   subnet_ids                    = ["subnet-123", "subnet-456"]
-  database_subnet_group         = module.vpc.database_subnet_group
   vpc_id                        = "vpc-123"
   artifactory_security_group_id = "sg-123"
 }
@@ -47,11 +44,11 @@ PRs are welcomed. More specific guidance will be added in future.
 
 Terratests can be run locally by running `make test` with AWS authentication.
 
-With aws-profile:   
+With aws-profile:
 `aws-profile -p <user> make test`
 
-With aws-vault:   
-`aws-vault exec <user> -- make test` 
+With aws-vault:
+`aws-vault exec <user> -- make test`
 
 
 ## Requirements
@@ -75,6 +72,7 @@ No modules.
 |-|-|
 |aws_cloudwatch_log_group.main|resource|
 |aws_db_instance.main|resource|
+|aws_db_subnet_group.main|resource|
 |aws_ecs_cluster.main|resource|
 |aws_ecs_service.main|resource|
 |aws_ecs_task_definition.main|resource|

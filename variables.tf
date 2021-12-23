@@ -25,12 +25,6 @@ variable "assign_public_ip" {
   description = "Set whether to give the Xray task a public IP. Only turn this on if testing with only an internet gateway."
 }
 
-# TODO: Confirm if this is temporary, do we create our own?
-variable "database_subnet_group" {
-  type        = string
-  description = "This is probabably temporary too like."
-}
-
 variable "xray_version" {
   type        = string
   description = "Version of JFrog Xray you wish to run."
