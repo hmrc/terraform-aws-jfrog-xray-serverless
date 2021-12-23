@@ -10,7 +10,7 @@ resource "aws_db_instance" "main" {
   instance_class         = "db.t3.micro"
   name                   = "jfrogxray"
   username               = "jfrogxray"
-  password               = data.aws_ssm_parameter.rds_password.value
+  password               = local.rds_password
   apply_immediately      = true
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.rds_instance.id]
