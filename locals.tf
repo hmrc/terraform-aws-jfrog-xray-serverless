@@ -21,8 +21,6 @@ locals {
 apk add curl
 apk add yq
 
-sleep 120
-
 xray_system_yaml_path="/mnt/xray-persistent-volume/etc/system.yaml"
 mkdir -p $(dirname $${xray_system_yaml_path})
 yq eval -i '.shared.jfrogUrl = "${var.artifactory_url}"' $${xray_system_yaml_path}
