@@ -47,7 +47,7 @@ resource "aws_iam_role" "ecs_execution" {
           ]
           Effect = "Allow"
           Resource = [
-            "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/${var.environment_name}/*"
+            "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${var.environment_name}/*"
           ]
         },
       ]

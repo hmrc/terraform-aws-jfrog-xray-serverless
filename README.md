@@ -5,11 +5,6 @@ Terraform module which uses serverless or managed [AWS](https://aws.amazon.com) 
 
 ## Usage
 
-<!--
-TODO: Is it cool to have the join key in plaintext like this? Might be better to advise using a sensitive variable or something
--->
-
-
 ```hcl
 module "jfrog_xray" {
   source = "github.com/hmrc/terraform-aws-jfrog-xray-serverless"
@@ -72,6 +67,7 @@ No modules.
 |Name|Type|
 |-|-|
 |aws_caller_identity.current|data|
+|aws_region.current|data|
 |aws_cloudwatch_log_group.main|resource|
 |aws_db_instance.main|resource|
 |aws_db_subnet_group.main|resource|

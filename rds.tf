@@ -1,5 +1,3 @@
-# TODO: Do something better with username/password
-
 resource "aws_db_instance" "main" {
   allocated_storage      = 20
   db_subnet_group_name   = aws_db_subnet_group.main.name
