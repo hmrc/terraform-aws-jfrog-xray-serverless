@@ -28,7 +28,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:*"
+                "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"
             ],
             "Action": [
                 "logs:CreateLogGroup",
@@ -38,8 +38,8 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${local.name}",
-                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:jfrog-xray-*"
+                "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${local.name}",
+                "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:jfrog-xray-*"
             ],
             "Action": [
                 "logs:DeleteLogGroup",
@@ -50,7 +50,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:logs:eu-west-2:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${local.name}:log-stream:*"
+                "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${local.name}:log-stream:*"
             ],
             "Action": [
                 "logs:CreateLogStream",
@@ -72,8 +72,8 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:ecs:eu-west-2:${data.aws_caller_identity.current.account_id}:service/jfrog-xray-*/xray",
-                "arn:aws:ecs:eu-west-2:${data.aws_caller_identity.current.account_id}:service/jfrog-xray-*-artifactory/artifactory"
+                "arn:aws:ecs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:service/jfrog-xray-*/xray",
+                "arn:aws:ecs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:service/jfrog-xray-*-artifactory/artifactory"
             ],
             "Action": [
                 "ecs:CreateService",
@@ -85,8 +85,8 @@ resource "aws_iam_role_policy" "codebuild-execution" {
                 {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:ecs:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster/jfrog-xray-*",
-                "arn:aws:ecs:eu-west-2:${data.aws_caller_identity.current.account_id}:cluster/jfrog-xray-*-artifactory"
+                "arn:aws:ecs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:cluster/jfrog-xray-*",
+                "arn:aws:ecs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:cluster/jfrog-xray-*-artifactory"
             ],
             "Action": [
                 "ecs:DeleteCluster",
@@ -120,6 +120,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
             ],
             "Action": [
                 "ec2:DescribeAccountAttributes",
+                "ec2:DescribeAvailabilityZones",
                 "ec2:DescribeInternetGateways",
                 "ec2:DescribeNetworkAcls",
                 "ec2:DescribeNetworkInterfaces",
@@ -135,7 +136,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:ec2:eu-west-2:${data.aws_caller_identity.current.account_id}:*"
+                "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
             ],
             "Action": [
                 "ec2:CreateInternetGateway",
@@ -150,7 +151,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:ec2:eu-west-2:${data.aws_caller_identity.current.account_id}:*"
+                "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
             ],
             "Action": [
                 "ec2:AssociateRouteTable",
@@ -203,7 +204,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:elasticfilesystem:eu-west-2:${data.aws_caller_identity.current.account_id}:file-system/*"
+                "arn:aws:elasticfilesystem:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:file-system/*"
             ],
             "Action": [
                 "elasticfilesystem:CreateAccessPoint",
@@ -218,7 +219,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:elasticfilesystem:eu-west-2:${data.aws_caller_identity.current.account_id}:access-point/*"
+                "arn:aws:elasticfilesystem:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:access-point/*"
             ],
             "Action": [
                 "elasticfilesystem:DeleteAccessPoint"
@@ -244,9 +245,9 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:elasticloadbalancing:eu-west-2:${data.aws_caller_identity.current.account_id}:listener/app/jfrog-xray-*-artifactory/*/*",
-                "arn:aws:elasticloadbalancing:eu-west-2:${data.aws_caller_identity.current.account_id}:loadbalancer/app/jfrog-xray-*-artifactory/*",
-                "arn:aws:elasticloadbalancing:eu-west-2:${data.aws_caller_identity.current.account_id}:targetgroup/jfrog-xray-*-artifactory/*"
+                "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:listener/app/jfrog-xray-*-artifactory/*/*",
+                "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:loadbalancer/app/jfrog-xray-*-artifactory/*",
+                "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:targetgroup/jfrog-xray-*-artifactory/*"
             ],
             "Action": [
                 "elasticloadbalancing:AddTags"
@@ -255,7 +256,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:elasticloadbalancing:eu-west-2:${data.aws_caller_identity.current.account_id}:loadbalancer/app/jfrog-xray-*-artifactory/*"
+                "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:loadbalancer/app/jfrog-xray-*-artifactory/*"
             ],
             "Action": [
                 "elasticloadbalancing:CreateListener",
@@ -268,7 +269,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:elasticloadbalancing:eu-west-2:${data.aws_caller_identity.current.account_id}:targetgroup/jfrog-xray-*-artifactory/*"
+                "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:targetgroup/jfrog-xray-*-artifactory/*"
             ],
             "Action": [
                 "elasticloadbalancing:CreateTargetGroup",
@@ -279,7 +280,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:elasticloadbalancing:eu-west-2:${data.aws_caller_identity.current.account_id}:listener/app/jfrog-xray-*-artifactory/*/*"
+                "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:listener/app/jfrog-xray-*-artifactory/*/*"
             ],
             "Action": [
                 "elasticloadbalancing:DeleteListener"
@@ -299,7 +300,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:*"
+                "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
             ],
             "Action": [
                 "rds:AddTagsToResource",
@@ -312,7 +313,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:subgrp:jfrog-xray-*"
+                "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:subgrp:jfrog-xray-*"
             ],
             "Action": [
                 "rds:CreateDBSubnetGroup",
@@ -322,7 +323,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:rds:eu-west-2:${data.aws_caller_identity.current.account_id}:db:jfrog-xray-*"
+                "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db:jfrog-xray-*"
             ],
             "Action": [
                 "rds:DeleteDBInstance"
@@ -331,7 +332,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/jfrog-xray-*/*"
+                "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/jfrog-xray-*/*"
             ],
             "Action": [
                 "ssm:AddTagsToResource",
@@ -346,7 +347,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:*"
+                "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
             ],
             "Action": [
                 "ssm:DescribeParameters"

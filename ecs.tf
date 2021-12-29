@@ -65,9 +65,8 @@ resource "aws_ecs_task_definition" "main" {
         logConfiguration = {
           logDriver = "awslogs"
           options = {
-            awslogs-group = aws_cloudwatch_log_group.main.name
-            # TODO: current region
-            awslogs-region        = "eu-west-2"
+            awslogs-group         = aws_cloudwatch_log_group.main.name
+            awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "bootstrap-helper"
           }
         }
@@ -130,7 +129,7 @@ resource "aws_ecs_task_definition" "main" {
           logDriver = "awslogs"
           options = {
             awslogs-group         = aws_cloudwatch_log_group.main.name
-            awslogs-region        = "eu-west-2"
+            awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "router"
           }
         }
@@ -154,7 +153,7 @@ resource "aws_ecs_task_definition" "main" {
           logDriver = "awslogs"
           options = {
             awslogs-group         = aws_cloudwatch_log_group.main.name
-            awslogs-region        = "eu-west-2"
+            awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "observability"
           }
         }
@@ -190,7 +189,7 @@ resource "aws_ecs_task_definition" "main" {
           logDriver = "awslogs"
           options = {
             awslogs-group         = aws_cloudwatch_log_group.main.name
-            awslogs-region        = "eu-west-2"
+            awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "server"
           }
         }
@@ -226,7 +225,7 @@ resource "aws_ecs_task_definition" "main" {
           logDriver = "awslogs"
           options = {
             awslogs-group         = aws_cloudwatch_log_group.main.name
-            awslogs-region        = "eu-west-2"
+            awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "indexer"
           }
         }
@@ -262,7 +261,7 @@ resource "aws_ecs_task_definition" "main" {
           logDriver = "awslogs"
           options = {
             awslogs-group         = aws_cloudwatch_log_group.main.name
-            awslogs-region        = "eu-west-2"
+            awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "analysis"
           }
         }
@@ -297,7 +296,7 @@ resource "aws_ecs_task_definition" "main" {
           logDriver = "awslogs"
           options = {
             awslogs-group         = aws_cloudwatch_log_group.main.name
-            awslogs-region        = "eu-west-2"
+            awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "persist"
           }
         }
@@ -327,7 +326,7 @@ resource "aws_ecs_task_definition" "main" {
           logDriver = "awslogs"
           options = {
             awslogs-group         = aws_cloudwatch_log_group.main.name
-            awslogs-region        = "eu-west-2"
+            awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "rabbitmq"
           }
         }

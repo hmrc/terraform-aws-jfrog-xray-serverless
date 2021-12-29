@@ -49,6 +49,7 @@ In order for the Artifactory task to properly find an appropriate licence, first
 
 |Name|Type|
 |-|-|
+|aws_availability_zones.available|data|
 |aws_caller_identity.current|data|
 |aws_region.current|data|
 |aws_cloudwatch_log_group.artifactory|resource|

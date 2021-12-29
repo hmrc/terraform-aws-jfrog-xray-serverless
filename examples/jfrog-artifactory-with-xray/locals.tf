@@ -10,6 +10,7 @@ locals {
     environment_name = local.environment_name
     terraform_module = "terraform-aws-jfrog-xray-serverless"
   }
+  public_subnet_cidrs          = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24", "10.0.104.0/24", "10.0.105.0/24", "10.0.106.0/24"]
   artifactory_join_key         = "134eb13cfd3ec1fcb7e53219e7f5ee4e"
   artifactory_bootstrap_script = <<EOT
 apk add yq

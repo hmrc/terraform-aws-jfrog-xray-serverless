@@ -5,9 +5,8 @@ module "vpc" {
   name = local.environment_name
   cidr = "10.0.0.0/16"
 
-  # TODO: Variabalise region?
-  azs            = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
-  public_subnets = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  azs            = data.aws_availability_zones.available.zone_ids
+  public_subnets = slice(local.public_subnet_cidrs, 0, length(data.aws_availability_zones.available.zone_ids))
 
   enable_dns_hostnames = true
   enable_dns_support   = true
