@@ -33,7 +33,7 @@ resource "aws_iam_role" "ecs_execution" {
       ]
     })
   }
-  
+
   inline_policy {
     name = "ssm"
 
@@ -47,7 +47,7 @@ resource "aws_iam_role" "ecs_execution" {
           ]
           Effect = "Allow"
           Resource = [
-            "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/${var.environment_name}/rds/password"
+            "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/${var.environment_name}/*"
           ]
         },
       ]

@@ -24,7 +24,7 @@ apk add yq
 xray_system_yaml_path="/mnt/xray-persistent-volume/etc/system.yaml"
 mkdir -p $(dirname $${xray_system_yaml_path})
 yq eval -i '.shared.jfrogUrl = "${var.artifactory_url}"' $${xray_system_yaml_path}
-yq eval -i '.shared.security.joinKey = "${var.artifactory_join_key}"' $${xray_system_yaml_path}
+artifactory_join_key=$${ARTIFACTORY_JOIN_KEY} yq eval -i '.shared.security.joinKey = env(artifactory_join_key)' $${xray_system_yaml_path}
 yq eval -i '.shared.database.type = "postgresql"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.driver = "rg.postgresql.Driver"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.url = "postgres://${aws_db_instance.main.endpoint}/jfrogxray?sslmode=disable"' $${xray_system_yaml_path}
@@ -45,5 +45,4 @@ sleep 30s
 EOT
 }
 
-# TODO: Having the join key written to the task def like this is probably bad. Passing it in as a secret might be better
 # TODO: Do we really need that sleep? Can we do something better?

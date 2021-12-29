@@ -36,10 +36,10 @@ variable "artifactory_url" {
   description = "URL of the JFrog Artifactory/Platform service that Xray will be joined to."
 }
 
-# TODO: This should be sensitive, or maybe a parameter store path should be provided
 variable "artifactory_join_key" {
   type        = string
   description = "Key to use in order to join Xray to the JFrog Artifactory/Platform service."
+  sensitive   = true
 }
 
 variable "xray_task_memory" {

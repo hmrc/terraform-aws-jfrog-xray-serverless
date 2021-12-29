@@ -331,7 +331,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
         {
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/jfrog-xray-*/rds/password"
+                "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/jfrog-xray-*/*"
             ],
             "Action": [
                 "ssm:AddTagsToResource",
