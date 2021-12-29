@@ -26,5 +26,3 @@ yq eval -i '.OnboardingConfiguration.repoTypes[0] = "pypi"' /mnt/config/etc/arti
 chown -R 1030:1030 /mnt/config
 EOT
 }
-
-# TODO: Do we want the licence key to be extractable from the task definition like this?
