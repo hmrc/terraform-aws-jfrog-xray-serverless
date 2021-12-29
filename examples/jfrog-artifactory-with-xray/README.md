@@ -50,6 +50,7 @@ In order for the Artifactory task to properly find an appropriate licence, first
 |Name|Type|
 |-|-|
 |aws_caller_identity.current|data|
+|aws_region.current|data|
 |aws_cloudwatch_log_group.artifactory|resource|
 |aws_ecs_cluster.main|resource|
 |aws_ecs_service.jfrog_artifactory_service|resource|

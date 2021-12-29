@@ -95,6 +95,8 @@ No modules.
 |aws_security_group_rule.ecs_task_allow_postgres_to_rds|resource|
 |aws_security_group_rule.efs_allow_nfs_from_ecs_task|resource|
 |aws_security_group_rule.rds_allow_postgres_from_ecs_task|resource|
+|aws_ssm_parameter.artifactory_join_key|resource|
+|aws_ssm_parameter.rds_password|resource|
 |random_password.rds|resource|
 
 ## Inputs
