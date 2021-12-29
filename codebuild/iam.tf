@@ -327,6 +327,30 @@ resource "aws_iam_role_policy" "codebuild-execution" {
             "Action": [
                 "rds:DeleteDBInstance"
             ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:parameter/jfrog-xray-*/rds/password"
+            ],
+            "Action": [
+                "ssm:AddTagsToResource",
+                "ssm:DeleteParameter",
+                "ssm:DescribeParameter",
+                "ssm:GetParameter",
+                "ssm:GetParameters",
+                "ssm:ListTagsForResource",
+                "ssm:PutParameter"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.current.account_id}:*"
+            ],
+            "Action": [
+                "ssm:DescribeParameters"
+            ]
         }
     ]
 }

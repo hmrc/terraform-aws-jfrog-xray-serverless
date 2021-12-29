@@ -33,7 +33,7 @@ resource "aws_iam_role" "ecs_execution" {
       ]
     })
   }
-
+  
   inline_policy {
     name = "ssm"
 

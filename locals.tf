@@ -1,7 +1,8 @@
 resource "random_password" "rds" {
   length           = 128
+  upper            = true
   special          = true
-  override_special = "@"
+  override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
 locals {
