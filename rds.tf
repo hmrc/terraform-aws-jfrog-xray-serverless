@@ -12,12 +12,12 @@ resource "aws_db_instance" "main" {
   apply_immediately      = true
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.rds_instance.id]
-  tags                   = local.aws_tags
+  tags                   = local.combined_aws_tags
 }
 
 resource "aws_db_subnet_group" "main" {
   name       = var.environment_name
   subnet_ids = var.subnet_ids
-  tags       = local.aws_tags
+  tags       = local.combined_aws_tags
 }
 

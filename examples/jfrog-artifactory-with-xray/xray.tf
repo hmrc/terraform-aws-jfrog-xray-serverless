@@ -8,6 +8,7 @@ module "jfrog_xray" {
   assign_public_ip              = true
   vpc_id                        = module.vpc.vpc_id
   artifactory_security_group_id = aws_security_group.artifactory_instance.id
+  aws_tags                      = local.aws_tags
 }
 
 resource "null_resource" "wait_for_artifactory" {

@@ -1,6 +1,6 @@
 resource "aws_iam_role" "ecs_execution" {
   name = "${var.environment_name}-ecs-execution"
-  tags = local.aws_tags
+  tags = local.combined_aws_tags
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

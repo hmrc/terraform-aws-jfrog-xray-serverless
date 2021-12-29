@@ -53,3 +53,9 @@ variable "xray_task_cpu" {
   default     = 1024
   description = "CPU value to be used for the Xray Fargate task."
 }
+
+variable "aws_tags" {
+  type        = map
+  default     = {}
+  description = "Map of tags to apply to supporting AWS resources."
+}

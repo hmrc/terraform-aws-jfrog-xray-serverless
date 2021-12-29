@@ -6,11 +6,11 @@ resource "random_password" "rds" {
 }
 
 locals {
-  # TODO: Allow customers to pass in their own tags and merge them
-  aws_tags = {
+  default_aws_tags = {
     environment_name = var.environment_name
     terraform_module = "terraform-aws-jfrog-xray-serverless"
   }
+  combined_aws_tags = merge(local.default_aws_tags, var.aws_tags)
 
   rabbitmq_uid = "999"
   xray_uid     = "1035"
