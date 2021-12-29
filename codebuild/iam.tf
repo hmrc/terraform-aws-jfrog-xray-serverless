@@ -120,6 +120,7 @@ resource "aws_iam_role_policy" "codebuild-execution" {
             ],
             "Action": [
                 "ec2:DescribeAccountAttributes",
+                "ec2:DescribeAvailabilityZones",
                 "ec2:DescribeInternetGateways",
                 "ec2:DescribeNetworkAcls",
                 "ec2:DescribeNetworkInterfaces",
