@@ -11,6 +11,7 @@ locals {
     terraform_module = "terraform-aws-jfrog-xray-serverless"
   }
   public_subnet_cidrs          = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24", "10.0.104.0/24", "10.0.105.0/24", "10.0.106.0/24"]
+  artifactory_version          = "7.29.8"
   artifactory_join_key         = "134eb13cfd3ec1fcb7e53219e7f5ee4e"
   artifactory_bootstrap_script = <<EOT
 apk add yq
@@ -25,5 +26,3 @@ yq eval -i '.OnboardingConfiguration.repoTypes[0] = "pypi"' /mnt/config/etc/arti
 chown -R 1030:1030 /mnt/config
 EOT
 }
-
-# TODO: Do we want the licence key to be extractable from the task definition like this?

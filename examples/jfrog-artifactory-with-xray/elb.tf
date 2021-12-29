@@ -16,7 +16,6 @@ resource "aws_lb_target_group" "artifactory" {
   deregistration_delay = 0
   tags                 = local.aws_tags
 
-  # TODO: Tweak health check configuration
   health_check {
     healthy_threshold   = 5
     unhealthy_threshold = 10

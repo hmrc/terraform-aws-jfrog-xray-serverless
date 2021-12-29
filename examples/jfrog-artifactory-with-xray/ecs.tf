@@ -43,8 +43,7 @@ resource "aws_ecs_task_definition" "artifactory" {
       },
       {
         name = "artifactory"
-        # TODO: pin/variablise
-        image     = "releases-docker.jfrog.io/jfrog/artifactory-pro:latest"
+        image     = "releases-docker.jfrog.io/jfrog/artifactory-pro:${local.artifactory_version}"
         essential = true
         dependsOn = [{
           condition     = "COMPLETE"
