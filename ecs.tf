@@ -125,6 +125,9 @@ resource "aws_ecs_task_definition" "main" {
             sourceVolume  = "xray-persistent-volume"
           }
         ]
+        command = [
+          "/bin/sh", "-c", "ls", "-al", "/var/opt/jfrog/router/", ";", "ls", "-al", "/opt/jfrog/router/")
+        ]
         logConfiguration = {
           logDriver = "awslogs"
           options = {

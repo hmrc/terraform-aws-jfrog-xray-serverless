@@ -18,6 +18,7 @@ locals {
   rds_password = random_password.rds.result
 
   bootstrap_script = <<EOT
+set -x
 apk add curl
 apk add yq
 
@@ -41,6 +42,11 @@ echo "[rabbitmq_management,rabbitmq_prometheus]." > /mnt/rabbitmq-persistent-vol
 chown -R ${local.xray_uid}:${local.xray_uid} /mnt/xray-persistent-volume
 chown -R ${local.rabbitmq_uid}:${local.rabbitmq_uid} /mnt/rabbitmq-persistent-volume
 
+<<<<<<< Updated upstream
+=======
+ls -al /opt/jfrog/router/var/etc/security/join.key
+
+>>>>>>> Stashed changes
 echo "****DONE****"
 EOT
 }
