@@ -10,7 +10,9 @@ locals {
     environment_name = var.environment_name
     terraform_module = "terraform-aws-jfrog-xray-serverless"
   }
+  db_end_point      = var.db_endpoint == "" ? trim(jsonencode(aws_db_instance.main[0].endpoint), "[]") : var.db_endpoint
   combined_aws_tags = merge(local.default_aws_tags, var.aws_tags)
+
 
   rabbitmq_uid = "999"
   xray_uid     = "1035"
@@ -27,8 +29,8 @@ yq eval -i '.shared.jfrogUrl = "${var.artifactory_url}"' $${xray_system_yaml_pat
 yq eval -i '.shared.security.joinKey = "'"$(echo $${ARTIFACTORY_JOIN_KEY})"'"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.type = "postgresql"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.driver = "rg.postgresql.Driver"' $${xray_system_yaml_path}
-yq eval -i '.shared.database.url = "postgres://${aws_db_instance.main.endpoint}/jfrogxray?sslmode=disable"' $${xray_system_yaml_path}
-yq eval -i '.shared.database.username = "jfrogxray"' $${xray_system_yaml_path}
+yq eval -i '.shared.database.url = "postgres://${local.db_end_point}/jfrogxray?sslmode=disable"' $${xray_system_yaml_path}
+yq eval -i '.shared.database.username = "artifactory"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.password = "'"$(echo $${RDS_PASSWORD})"'"' $${xray_system_yaml_path}
 
 curl -LO https://releases.jfrog.io/artifactory/jfrog-xray/xray-compose/${var.xray_version}/jfrog-xray-${var.xray_version}-compose.tar.gz

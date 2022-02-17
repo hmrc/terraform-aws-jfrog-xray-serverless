@@ -1,4 +1,5 @@
 resource "aws_db_instance" "main" {
+  count                  = var.db_endpoint == "" ? 1 : 0
   allocated_storage      = 20
   db_subnet_group_name   = aws_db_subnet_group.main.name
   storage_type           = "gp2"
@@ -7,7 +8,7 @@ resource "aws_db_instance" "main" {
   identifier             = var.environment_name
   instance_class         = "db.t3.micro"
   name                   = "jfrogxray"
-  username               = "jfrogxray"
+  username               = "artifactory"
   password               = local.rds_password
   apply_immediately      = true
   skip_final_snapshot    = true
@@ -20,4 +21,5 @@ resource "aws_db_subnet_group" "main" {
   subnet_ids = var.subnet_ids
   tags       = local.combined_aws_tags
 }
+
 
