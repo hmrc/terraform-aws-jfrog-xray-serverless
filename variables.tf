@@ -28,7 +28,13 @@ variable "assign_public_ip" {
 variable "xray_version" {
   type        = string
   description = "Version of JFrog Xray you wish to run."
-  default     = "3.36.2"
+  default     = "3.33.3"
+}
+
+variable "xray_router_version" {
+  type        = string
+  description = "Version of JFrog Xray you wish to run."
+  default     = "7.25.1"
 }
 
 variable "artifactory_url" {
@@ -40,6 +46,7 @@ variable "artifactory_join_key" {
   type        = string
   description = "Key to use in order to join Xray to the JFrog Artifactory/Platform service."
   sensitive   = true
+  default     = ""
 }
 
 variable "xray_task_memory" {
