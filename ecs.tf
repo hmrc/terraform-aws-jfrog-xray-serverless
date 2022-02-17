@@ -1,6 +1,6 @@
 
 resource "aws_ecs_cluster" "main" {
-  name = var.environment_name
+  name = "${var.environment_name}-jfrog-xray"
   tags = local.combined_aws_tags
 }
 
@@ -22,7 +22,7 @@ resource "aws_ecs_service" "main" {
 }
 
 resource "aws_ecs_task_definition" "main" {
-  family                   = var.environment_name
+  family                   = "${var.environment_name}-jfrog-xray"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.xray_task_cpu
   memory                   = var.xray_task_memory
@@ -96,7 +96,7 @@ resource "aws_ecs_task_definition" "main" {
       },
       {
         name  = "xray_router"
-        image = "releases-docker.jfrog.io/jfrog/router:7.28.1"
+        image = "releases-docker.jfrog.io/jfrog/router:${var.xray_router_version}"
         user  = "1035:1035"
         environment = [
           {
