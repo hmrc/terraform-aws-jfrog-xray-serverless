@@ -1,4 +1,3 @@
-
 resource "aws_ecs_cluster" "main" {
   name = "${var.environment_name}-jfrog-xray"
   tags = local.combined_aws_tags
@@ -77,7 +76,7 @@ resource "aws_ecs_task_definition" "main" {
           },
           {
             name      = "RDS_PASSWORD"
-            valueFrom = "/${var.environment_name}/rds/password"
+            valueFrom = var.db_endpoint == "" ? "/${var.environment_name}/rds/password" : var.db_ssm_parameter
           }
         ]
         mountPoints = [

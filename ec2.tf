@@ -109,3 +109,13 @@ resource "aws_security_group_rule" "rds_allow_postgres_from_ecs_task" {
   security_group_id        = aws_security_group.rds_instance.id
   source_security_group_id = aws_security_group.ecs_task.id
 }
+
+resource "aws_security_group_rule" "jfrog_xray_ingress_rule" {
+  description              = "Permit xray ecs instance ingress."
+  security_group_id        = var.artifactory_security_group_id
+  type                     = "ingress"
+  from_port                = "8040"
+  to_port                  = "8090"
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.ecs_task.id
+}

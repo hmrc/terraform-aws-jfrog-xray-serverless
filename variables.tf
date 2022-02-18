@@ -66,3 +66,15 @@ variable "aws_tags" {
   default     = {}
   description = "Map of tags to apply to supporting AWS resources."
 }
+
+variable "db_endpoint" {
+  type        = string
+  default     = ""
+  description = "Artifactory DB instance endpoint."
+}
+
+variable "db_ssm_parameter" {
+  type        = string
+  default     = ""
+  description = "Artifactory DB password stored path on SSM."
+}
