@@ -12,7 +12,7 @@ resource "aws_db_instance" "main" {
   password               = local.rds_password
   apply_immediately      = true
   skip_final_snapshot    = true
-  vpc_security_group_ids = [aws_security_group.rds_instance.id]
+  vpc_security_group_ids = [aws_security_group.rds_instance[0].id]
   tags                   = local.combined_aws_tags
 }
 

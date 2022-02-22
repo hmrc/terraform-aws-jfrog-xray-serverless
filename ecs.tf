@@ -72,10 +72,10 @@ resource "aws_ecs_task_definition" "main" {
         secrets = [
           {
             name      = "ARTIFACTORY_JOIN_KEY"
-            valueFrom = "/${var.environment_name}/artifactory-join-key"
+            valueFrom = "/${var.environment_name}-artifactory/artifactory/join-key"
           },
           {
-            name      = "RDS_PASSWORD"
+            name      = "PGPASSWORD"
             valueFrom = var.db_endpoint == "" ? "/${var.environment_name}/rds/password" : var.db_ssm_parameter
           }
         ]

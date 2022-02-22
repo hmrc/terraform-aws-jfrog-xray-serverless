@@ -10,9 +10,11 @@ locals {
     environment_name = var.environment_name
     terraform_module = "terraform-aws-jfrog-xray-serverless"
   }
-  db_end_point      = var.db_endpoint == "" ? trim(jsonencode(aws_db_instance.main[0].endpoint), "[]") : var.db_endpoint
-  combined_aws_tags = merge(local.default_aws_tags, var.aws_tags)
+  db_end_point      = var.db_endpoint == "" ? trim(jsonencode(aws_db_instance.main[0].endpoint), "\"[]") : trim(var.db_endpoint, "\"")
+  db_hostname       = split(":", local.db_end_point)[0]
+  db_port           = var.db_endpoint == "" ? split(":", local.db_end_point)[1] : "5432"
 
+  combined_aws_tags = merge(local.default_aws_tags, var.aws_tags)
 
   rabbitmq_uid = "999"
   xray_uid     = "1035"
@@ -22,7 +24,9 @@ locals {
   bootstrap_script = <<EOT
 apk add curl
 apk add yq
+apk add postgresql14-client
 
+echo generating yaml config
 xray_system_yaml_path="/mnt/xray-persistent-volume/etc/system.yaml"
 mkdir -p $(dirname $${xray_system_yaml_path})
 yq eval -i '.shared.jfrogUrl = "${var.artifactory_url}"' $${xray_system_yaml_path}
@@ -31,15 +35,21 @@ yq eval -i '.shared.database.type = "postgresql"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.driver = "rg.postgresql.Driver"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.url = "postgres://${local.db_end_point}/jfrogxray?sslmode=disable"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.username = "artifactory"' $${xray_system_yaml_path}
-yq eval -i '.shared.database.password = "'"$(echo $${RDS_PASSWORD})"'"' $${xray_system_yaml_path}
+yq eval -i '.shared.database.password = "'"$(echo $${PGPASSWORD})"'"' $${xray_system_yaml_path}
 
+echo initialising DB
+psql -q -h ${local.db_hostname} -p ${local.db_port} -U artifactory -d postgres -c "CREATE DATABASE jfrogxray"
+
+echo downloading xray compose
 curl -LO https://releases.jfrog.io/artifactory/jfrog-xray/xray-compose/${var.xray_version}/jfrog-xray-${var.xray_version}-compose.tar.gz
 tar -zxf jfrog-xray-${var.xray_version}-compose.tar.gz
 mkdir -p /mnt/rabbitmq-persistent-volume/conf.d
 
+echo installing rabbit xray compose
 cp -a jfrog-xray-${var.xray_version}-compose/third-party/rabbitmq/* /mnt/rabbitmq-persistent-volume
 echo "[rabbitmq_management,rabbitmq_prometheus]." > /mnt/rabbitmq-persistent-volume/enabled_plugins
 
+echo chowning
 chown -R ${local.xray_uid}:${local.xray_uid} /mnt/xray-persistent-volume
 chown -R ${local.rabbitmq_uid}:${local.rabbitmq_uid} /mnt/rabbitmq-persistent-volume
 

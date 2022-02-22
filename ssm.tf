@@ -1,6 +1,6 @@
 resource "aws_ssm_parameter" "artifactory_join_key" {
   count = var.artifactory_join_key == "" ? 0 : 1
-  name  = "/${var.environment_name}/artifactory-join-key"
+  name  = "/${var.environment_name}-artifactory/artifactory/join-key"
   type  = "SecureString"
   value = var.artifactory_join_key
   tags  = local.combined_aws_tags
