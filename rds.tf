@@ -17,6 +17,7 @@ resource "aws_db_instance" "main" {
 }
 
 resource "aws_db_subnet_group" "main" {
+  count      = var.db_endpoint == "" ? 1 : 0
   name       = var.environment_name
   subnet_ids = var.subnet_ids
   tags       = local.combined_aws_tags
