@@ -104,7 +104,10 @@ No modules.
 |artifactory_url|URL of the JFrog Artifactory/Platform service that Xray will be joined to.|`string`|n/a|yes|
 |assign_public_ip|Set whether to give the Xray task a public IP. Only turn this on if testing with only an internet gateway.|`bool`|`false`|no|
 |aws_tags|Map of tags to apply to supporting AWS resources.|`map`|`{}`|no|
+|db_endpoint|The hostname of an external RDS instance|`string`|`""`|no|
+|db_ssm_parameter|The name of an existing ssm parameter that holds the RDS password|`string`|`""`|no|
 |environment_name|The name of the environment. Used for the names of various resources.|`string`|`"jfrog-xray"`|no|
+|rds_security_group_id|A security group for an external RDS|`string`|`""`|no|
 |subnet_ids|A list of subnet IDs to run the JFrog Xray resources in.|`list(string)`|n/a|yes|
 |vpc_id|The ID of the VPC to run the JFrog Xray resources in.|`string`|n/a|yes|
 |xray_task_cpu|CPU value to be used for the Xray Fargate task.|`number`|`1024`|no|

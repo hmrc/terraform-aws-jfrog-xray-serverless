@@ -9,6 +9,12 @@ variable "artifactory_security_group_id" {
   description = "The ID of the Security Group assigned to Artifactory instances."
 }
 
+variable "rds_security_group_id" {
+  type        = string
+  description = "The ID of the Security Group assigned to Artifactory instances."
+  default     = ""
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC to run the JFrog Xray resources in."

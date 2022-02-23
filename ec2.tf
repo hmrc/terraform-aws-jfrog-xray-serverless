@@ -85,6 +85,7 @@ resource "aws_security_group_rule" "efs_allow_nfs_from_ecs_task" {
 
 resource "aws_security_group" "rds_instance" {
   name        = "${var.environment_name}-rds-instance"
+  count       = var.rds_security_group_id == "" ? 1 : 0
   description = "Security group for the Xray RDS instance"
   vpc_id      = var.vpc_id
   tags        = local.combined_aws_tags
@@ -96,7 +97,7 @@ resource "aws_security_group_rule" "ecs_task_allow_postgres_to_rds" {
   from_port                = 5432
   to_port                  = 5432
   protocol                 = "tcp"
-  source_security_group_id = aws_security_group.rds_instance.id
+  source_security_group_id = var.rds_security_group_id == "" ? aws_security_group.rds_instance[0].id : var.rds_security_group_id
   security_group_id        = aws_security_group.ecs_task.id
 }
 
@@ -106,7 +107,7 @@ resource "aws_security_group_rule" "rds_allow_postgres_from_ecs_task" {
   from_port                = 5432
   to_port                  = 5432
   protocol                 = "tcp"
-  security_group_id        = aws_security_group.rds_instance.id
+  security_group_id        = var.rds_security_group_id == "" ? aws_security_group.rds_instance[0].id : var.rds_security_group_id
   source_security_group_id = aws_security_group.ecs_task.id
 }
 
