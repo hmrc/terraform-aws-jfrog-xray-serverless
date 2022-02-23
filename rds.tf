@@ -1,7 +1,7 @@
 resource "aws_db_instance" "main" {
   count                  = var.db_endpoint == "" ? 1 : 0
   allocated_storage      = 20
-  db_subnet_group_name   = aws_db_subnet_group.main.name
+  db_subnet_group_name   = aws_db_subnet_group.main[0].name
   storage_type           = "gp2"
   engine                 = "postgres"
   engine_version         = "12.7"
