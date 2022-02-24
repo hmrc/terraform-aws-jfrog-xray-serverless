@@ -18,6 +18,11 @@ resource "aws_ecs_service" "main" {
     assign_public_ip = var.assign_public_ip
     security_groups  = [aws_security_group.ecs_task.id]
   }
+
+  depends_on = [
+    aws_efs_access_point.xray,
+    aws_efs_access_point.rabbitmq
+  ]
 }
 
 resource "aws_ecs_task_definition" "main" {
