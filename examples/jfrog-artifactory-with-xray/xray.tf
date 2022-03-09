@@ -26,7 +26,7 @@ do
   then
     exit 1
   fi
-  sleep 10s
+  sleep 10
   ((counter++))
 done
 EOT
@@ -48,7 +48,7 @@ do
   then
     exit 1
   fi
-  sleep 10s
+  sleep 10
   ((counter++))
 done
 EOT
