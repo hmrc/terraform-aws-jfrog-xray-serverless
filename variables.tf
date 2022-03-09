@@ -57,13 +57,13 @@ variable "artifactory_join_key" {
 
 variable "xray_task_memory" {
   type        = number
-  default     = 2048
+  default     = 16384
   description = "Amount of memory in to be used for the Xray Fargate task."
 }
 
 variable "xray_task_cpu" {
   type        = number
-  default     = 1024
+  default     = 4096
   description = "CPU value to be used for the Xray Fargate task."
 }
 
