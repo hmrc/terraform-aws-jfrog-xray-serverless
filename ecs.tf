@@ -81,7 +81,7 @@ resource "aws_ecs_task_definition" "main" {
           },
           {
             name      = "PGPASSWORD"
-            valueFrom = var.db_endpoint == "" ? "/${var.environment_name}/rds/password" : var.db_ssm_parameter
+            valueFrom = var.db_endpoint == "" ? aws_ssm_parameter.rds_password[0].name : var.db_ssm_parameter
           }
         ]
         mountPoints = [
