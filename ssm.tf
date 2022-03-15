@@ -8,7 +8,7 @@ resource "aws_ssm_parameter" "artifactory_join_key" {
 
 resource "aws_ssm_parameter" "rds_password" {
   count = var.db_endpoint == "" ? 1 : 0
-  name  = "/${var.environment_name}/rds/password"
+  name  = "/${var.environment_name}-artifactory/xray/db/password"
   type  = "SecureString"
   value = local.rds_password
   tags  = local.combined_aws_tags
