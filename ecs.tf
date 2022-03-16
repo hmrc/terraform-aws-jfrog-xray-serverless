@@ -115,6 +115,9 @@ resource "aws_ecs_task_definition" "main" {
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
+        },{
+          condition     = "START"
+          containerName = "xray_server"
         }]
         essential = true
         portMappings = [
@@ -145,6 +148,9 @@ resource "aws_ecs_task_definition" "main" {
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
+        },{
+          condition     = "START"
+          containerName = "xray_router"
         }]
         essential = true
         mountPoints = [
@@ -206,6 +212,9 @@ resource "aws_ecs_task_definition" "main" {
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
+        },{
+          condition     = "START"
+          containerName = "xray_persist"
         }]
         ulimits = [
           {
@@ -242,6 +251,9 @@ resource "aws_ecs_task_definition" "main" {
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
+        },{
+          condition     = "START"
+          containerName = "xray_indexer"
         }]
         ulimits = [
           {
@@ -278,6 +290,9 @@ resource "aws_ecs_task_definition" "main" {
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
+        },{
+          condition     = "START"
+          containerName = "xray_observability"
         }]
         ulimits = [
           {
