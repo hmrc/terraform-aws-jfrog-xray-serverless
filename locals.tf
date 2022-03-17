@@ -36,9 +36,7 @@ yq eval -i '.shared.database.driver = "rg.postgresql.Driver"' $${xray_system_yam
 yq eval -i '.shared.database.url = "postgres://${local.db_end_point}/jfrogxray?sslmode=disable"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.username = "artifactory"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.password = "'"$(echo $${PGPASSWORD})"'"' $${xray_system_yaml_path}
-
-echo initialising DB
-psql -q -h ${local.db_hostname} -p ${local.db_port} -U artifactory -d postgres -c "CREATE DATABASE jfrogxray"
+yq eval -i '.shared.node.id = "xray1"' $${xray_system_yaml_path}
 
 echo downloading xray compose
 curl -LO https://releases.jfrog.io/artifactory/jfrog-xray/xray-compose/${var.xray_version}/jfrog-xray-${var.xray_version}-compose.tar.gz
