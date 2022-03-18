@@ -38,6 +38,8 @@ yq eval -i '.shared.database.username = "artifactory"' $${xray_system_yaml_path}
 yq eval -i '.shared.database.password = "'"$(echo $${PGPASSWORD})"'"' $${xray_system_yaml_path}
 yq eval -i '.shared.node.id = "xray1"' $${xray_system_yaml_path}
 
+cat /mnt/xray-persistent-volume/etc/security/master.key
+
 echo downloading xray compose
 curl -LO https://releases.jfrog.io/artifactory/jfrog-xray/xray-compose/${var.xray_version}/jfrog-xray-${var.xray_version}-compose.tar.gz
 tar -zxf jfrog-xray-${var.xray_version}-compose.tar.gz
