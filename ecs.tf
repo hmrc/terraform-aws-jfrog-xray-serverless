@@ -7,7 +7,7 @@ resource "aws_ecs_service" "main" {
   name                               = "xray"
   cluster                            = aws_ecs_cluster.main.arn
   task_definition                    = aws_ecs_task_definition.main.arn
-  desired_count                      = 1
+  desired_count                      = 0
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100
   launch_type                        = "FARGATE"
