@@ -7,7 +7,7 @@ resource "aws_ecs_service" "main" {
   name                               = "xray"
   cluster                            = aws_ecs_cluster.main.arn
   task_definition                    = aws_ecs_task_definition.main.arn
-  desired_count                      = 1
+  desired_count                      = 0
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100
   launch_type                        = "FARGATE"
@@ -81,7 +81,7 @@ resource "aws_ecs_task_definition" "main" {
           },
           {
             name      = "PGPASSWORD"
-            valueFrom = var.db_endpoint == "" ? "/${var.environment_name}/rds/password" : var.db_ssm_parameter
+            valueFrom = var.db_endpoint == "" ? aws_ssm_parameter.rds_password[0].name : var.db_ssm_parameter
           }
         ]
         mountPoints = [
@@ -115,6 +115,9 @@ resource "aws_ecs_task_definition" "main" {
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
+        },{
+          condition     = "START"
+          containerName = "xray_server"
         }]
         essential = true
         portMappings = [
@@ -145,6 +148,9 @@ resource "aws_ecs_task_definition" "main" {
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
+        },{
+          condition     = "START"
+          containerName = "xray_router"
         }]
         essential = true
         mountPoints = [
@@ -206,6 +212,9 @@ resource "aws_ecs_task_definition" "main" {
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
+        },{
+          condition     = "START"
+          containerName = "xray_persist"
         }]
         ulimits = [
           {
@@ -242,6 +251,9 @@ resource "aws_ecs_task_definition" "main" {
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
+        },{
+          condition     = "START"
+          containerName = "xray_indexer"
         }]
         ulimits = [
           {
@@ -278,6 +290,9 @@ resource "aws_ecs_task_definition" "main" {
         dependsOn = [{
           condition     = "COMPLETE"
           containerName = "bootstrap-helper"
+        },{
+          condition     = "START"
+          containerName = "xray_observability"
         }]
         ulimits = [
           {

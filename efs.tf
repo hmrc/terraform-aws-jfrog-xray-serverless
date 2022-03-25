@@ -1,6 +1,6 @@
 resource "aws_efs_file_system" "main" {
   creation_token = var.environment_name
-  tags           = local.combined_aws_tags
+  tags           = merge(local.combined_aws_tags, { Name = "${var.environment_name}-xray" })
 }
 
 resource "aws_efs_mount_target" "main" {

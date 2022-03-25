@@ -5,7 +5,7 @@ resource "aws_db_instance" "main" {
   storage_type           = "gp2"
   engine                 = "postgres"
   engine_version         = "12.7"
-  identifier             = var.environment_name
+  identifier             = "${var.environment_name}-jfrog-xray"
   instance_class         = "db.m5.2xlarge"
   name                   = "jfrogxray"
   username               = "artifactory"
